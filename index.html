@@ -42,6 +42,14 @@
     /* تیتر: فقط برای عنوان */
     @font-face { font-family: 'F-Titr'; font-weight: 100 900; font-display: swap; src: url('fonts/titr-700.woff2') format('woff2'); }
 
+    /* لبخند (اعداد فارسی) */
+    @font-face { font-family: 'F-Labkhand'; font-weight: 100 200; font-display: swap; src: url('fonts/labkhand-100.woff2') format('woff2'); }
+    @font-face { font-family: 'F-Labkhand'; font-weight: 300; font-display: swap; src: url('fonts/labkhand-300.woff2') format('woff2'); }
+    @font-face { font-family: 'F-Labkhand'; font-weight: 400; font-display: swap; src: url('fonts/labkhand-400.woff2') format('woff2'); }
+    @font-face { font-family: 'F-Labkhand'; font-weight: 500; font-display: swap; src: url('fonts/labkhand-500.woff2') format('woff2'); }
+    @font-face { font-family: 'F-Labkhand'; font-weight: 600; font-display: swap; src: url('fonts/labkhand-600.woff2') format('woff2'); }
+    @font-face { font-family: 'F-Labkhand'; font-weight: 700 900; font-display: swap; src: url('fonts/labkhand-700.woff2') format('woff2'); }
+
 
     :root {
       /* سه دسته‌ی متن: متن، عنوان، روزها */
@@ -309,6 +317,7 @@
 
     // ---------------- فونت‌ها ----------------
     const FONTS = [
+      { id: 'labkhand', name: 'لبخند',     css: "'F-Labkhand'" },
       { id: 'iransans', name: 'ایران‌سنس', css: "'F-IRANSans'" },
       { id: 'yekan',    name: 'یکان',      css: "'F-Yekan'" },
       { id: 'shabnam',  name: 'شبنم',      css: "'F-Shabnam'" },
@@ -318,7 +327,7 @@
       { id: 'titr',     name: 'تیتر',      css: "'F-Titr'", noBody: true },
       { id: 'tahoma',   name: 'تاهوما',    css: 'Tahoma' }
     ];
-    const WEIGHTS = [[300,'نازک'],[400,'معمولی'],[500,'متوسط'],[700,'ضخیم'],[800,'خیلی ضخیم'],[900,'سیاه']];
+    const WEIGHTS = [[300,'نازک'],[400,'معمولی'],[500,'متوسط'],[600,'نیمه‌ضخیم'],[700,'ضخیم'],[800,'خیلی ضخیم'],[900,'سیاه']];
     const GROUPS = {
       main:  { font: 'iransans', size: 1, weight: 400 },
       title: { font: 'pinar',    size: 1, weight: 800 },
