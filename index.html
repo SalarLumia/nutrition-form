@@ -128,9 +128,9 @@
     .page * { font-family: inherit; }
 
     /* خطوط تزئینی گوشه‌ها */
-    .deco { position: absolute; pointer-events: none; z-index: 0; color: var(--deco); }
-    .deco.tr { top: 0; right: 0; width: 56mm; }
-    .deco.bl { bottom: 0; left: 0; width: 56mm; transform: rotate(180deg); }
+    .deco { position: absolute; pointer-events: none; z-index: 0; color: var(--rule); opacity: 0.9; stroke-width: 0.25mm; }
+    .deco.tr { top: 0; right: 0; width: 60mm; height: 34mm; }
+    .deco.bl { bottom: 0; left: 0; width: 60mm; height: 34mm; }
     /* قاب نازک دور صفحه */
     .frame {
       position: absolute; inset: 5mm; z-index: 0; pointer-events: none;
@@ -192,7 +192,8 @@
     .card {
       border: 0.35mm solid var(--line);
       border-radius: 5mm;
-      background: var(--card);
+      /* کاغذ زیر رنگ کارت تا خطوط پشت کارت دیده نشوند */
+      background: linear-gradient(var(--card), var(--card)), var(--paper);
       padding: 2mm 4mm 2.5mm;
       display: flex; flex-direction: column; min-height: 0;
     }
@@ -278,17 +279,18 @@
 
   <main class="page" id="chartPage">
     <div class="frame"></div>
-    <svg class="deco tr" viewBox="0 0 300 240" fill="none" stroke="currentColor" stroke-linecap="round">
-      <path d="M300 18 C 228 24, 186 62, 128 58 C 74 54, 40 86, 22 140 C 14 166, 6 190, 0 214" stroke-width="1.1" opacity="0.85"/>
-      <path d="M300 40 C 236 48, 200 86, 146 84 C 96 82, 66 112, 50 160 C 42 186, 34 210, 26 240" stroke-width="0.8" opacity="0.6"/>
-      <path d="M300 62 C 246 72, 216 108, 166 110 C 122 112, 96 138, 82 180 C 76 200, 70 222, 64 240" stroke-width="0.6" opacity="0.4"/>
-      <circle cx="128" cy="58" r="2.2" fill="currentColor" stroke="none" opacity="0.8"/>
+    <!-- خطوط گوشه‌ها: هم‌رنگ و هم‌ضخامت قاب دور صفحه، با مسیرهای نامنظم -->
+    <svg class="deco tr" viewBox="0 0 600 340" fill="none" stroke="currentColor" stroke-linecap="round">
+      <path vector-effect="non-scaling-stroke" d="M600 46 C 528 34, 486 96, 414 84 C 352 74, 318 22, 252 52 C 196 78, 170 150, 104 176"/>
+      <path vector-effect="non-scaling-stroke" d="M600 132 C 552 120, 528 178, 468 182 C 410 186, 392 136, 338 150"/>
+      <path vector-effect="non-scaling-stroke" d="M566 0 C 552 58, 508 104, 446 126 C 384 148, 368 214, 292 248"/>
+      <circle cx="414" cy="84" r="5" fill="currentColor" stroke="none"/>
     </svg>
-    <svg class="deco bl" viewBox="0 0 300 240" fill="none" stroke="currentColor" stroke-linecap="round">
-      <path d="M300 18 C 228 24, 186 62, 128 58 C 74 54, 40 86, 22 140 C 14 166, 6 190, 0 214" stroke-width="1.1" opacity="0.85"/>
-      <path d="M300 40 C 236 48, 200 86, 146 84 C 96 82, 66 112, 50 160 C 42 186, 34 210, 26 240" stroke-width="0.8" opacity="0.6"/>
-      <path d="M300 62 C 246 72, 216 108, 166 110 C 122 112, 96 138, 82 180 C 76 200, 70 222, 64 240" stroke-width="0.6" opacity="0.4"/>
-      <circle cx="128" cy="58" r="2.2" fill="currentColor" stroke="none" opacity="0.8"/>
+    <svg class="deco bl" viewBox="0 0 600 340" fill="none" stroke="currentColor" stroke-linecap="round">
+      <path vector-effect="non-scaling-stroke" d="M0 292 C 78 306, 124 246, 192 258 C 262 270, 296 324, 362 288 C 420 256, 446 182, 516 160"/>
+      <path vector-effect="non-scaling-stroke" d="M0 206 C 46 222, 74 170, 132 164 C 192 158, 214 214, 278 204"/>
+      <path vector-effect="non-scaling-stroke" d="M46 340 C 60 290, 104 252, 166 234 C 230 216, 262 150, 334 116"/>
+      <circle cx="192" cy="258" r="5" fill="currentColor" stroke="none"/>
     </svg>
 
     <header>
