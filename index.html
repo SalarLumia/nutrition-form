@@ -44,221 +44,196 @@
 
 
     :root {
-      --font-main: 'F-IRANSans', 'F-Shabnam', Tahoma, sans-serif;
+      /* سه دسته‌ی متن: متن، عنوان، روزها */
+      --font-main: 'F-IRANSans', Tahoma, sans-serif;
       --font-title: 'F-Pinar', 'F-IRANSans', Tahoma, sans-serif;
       --font-decor: 'F-Lotus', 'F-IRANSans', Tahoma, serif;
-      --font-scale: 1;
+      --s-main: 1;  --s-title: 1;  --s-decor: 1;
+      --w-main: 400; --w-title: 800; --w-decor: 700;
 
-      /* پالت گرم و کرم */
+      /* پالت پیش‌فرض: کرم */
       --paper: #F6F2EB;
+      --glow: rgba(214,196,178,0.45);
       --ink: #2E2A22;
       --title: #45432F;
-      --decor: #7A6A58;
+      --accent: #7A6A58;
       --label: #6F6556;
-      --card-line: #BEA999;
+      --line: #BEA999;
       --rule: #D6C9BE;
-      --soft: #EDE5DA;
+      --card: rgba(255,253,249,0.85);
+      --deco: #C2AD9B;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { font-family: var(--font-main); background: #E4DFD8; color: var(--ink); -webkit-font-smoothing: antialiased; }
 
-    html, body {
-      font-family: var(--font-main);
-      background: #E4DFD8;
-      color: var(--ink);
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* نوار ابزار (در چاپ مخفی) */
+    /* ---------------- نوار ابزار (در چاپ مخفی) ---------------- */
     .toolbar {
       font-family: 'F-Shabnam', Tahoma, sans-serif;
-      max-width: 210mm;
-      margin: 14px auto 10px;
-      padding: 10px 14px;
-      background: #FFFFFF;
-      border: 1px solid #DCD4CA;
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      font-size: 12px;
+      max-width: 210mm; margin: 14px auto 10px; padding: 12px 14px;
+      background: #FFF; border: 1px solid #DCD4CA; border-radius: 12px;
+      display: flex; flex-direction: column; gap: 9px;
+      font-size: 12px; color: #5E564C;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
-    .toolbar-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .toolbar label { color: #6A6055; font-size: 12px; display: flex; align-items: center; gap: 5px; }
+    .tb-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .tb-row .tb-name { width: 4.6em; font-weight: 700; color: #3A352D; }
+    .tb-row label { display: flex; align-items: center; gap: 5px; }
+    .tb-sep { height: 1px; background: #EEE8E0; }
     .toolbar button, .toolbar select, .toolbar .btn-file {
       font-family: inherit; font-size: 12px; font-weight: 700;
       padding: 6px 11px; border-radius: 8px;
-      border: 1px solid #BEA999; background: #FAF7F2; color: var(--ink); cursor: pointer;
+      border: 1px solid #CDBFB2; background: #FAF7F2; color: #2E2A22; cursor: pointer;
     }
-    .toolbar select { font-weight: 500; padding: 5px 6px; }
+    .toolbar select { font-weight: 500; padding: 4px 6px; }
+    .toolbar input[type="range"] { width: 90px; }
+    .toolbar .val { min-width: 2.6em; color: #8A7F72; }
     .toolbar button:hover, .toolbar .btn-file:hover { background: #F1EAE0; }
-    .toolbar .btn-primary { background: #45432F; border-color: #45432F; color: #FFFFFF; }
-    .toolbar .btn-primary:hover { background: #57553D; }
+    .toolbar .btn-primary { background: #3A372B; border-color: #3A372B; color: #FFF; }
     .toolbar input[type="file"] { display: none; }
     .save-status { font-size: 11.5px; color: #6B7A45; margin-inline-start: auto; }
+    .swatches { display: flex; gap: 6px; flex-wrap: wrap; }
+    .swatch {
+      display: flex; align-items: center; gap: 5px;
+      padding: 4px 9px 4px 6px !important; font-weight: 500 !important;
+    }
+    .swatch i { display: inline-flex; width: 26px; height: 14px; border-radius: 7px; overflow: hidden; border: 1px solid rgba(0,0,0,0.12); }
+    .swatch i b { flex: 1; }
+    .swatch.active { outline: 2px solid #3A372B; outline-offset: 1px; }
 
-    /* صفحه A4 عمودی */
+    /* ---------------- صفحه A4 عمودی ---------------- */
     .page {
       position: relative;
-      width: 210mm;
-      height: 297mm;
+      width: 210mm; height: 297mm;
       margin: 0 auto 24px;
-      padding: 11mm 12mm 8mm;
+      padding: 12mm 12mm 8mm;
       background:
-        radial-gradient(ellipse 70mm 55mm at 100% 0%, rgba(214,196,178,0.45), transparent 70%),
-        radial-gradient(ellipse 80mm 60mm at 0% 100%, rgba(214,196,178,0.40), transparent 70%),
+        radial-gradient(ellipse 75mm 60mm at 100% 0%, var(--glow), transparent 72%),
+        radial-gradient(ellipse 85mm 65mm at 0% 100%, var(--glow), transparent 72%),
         var(--paper);
-      display: flex;
-      flex-direction: column;
-      gap: 4.5mm;
+      display: flex; flex-direction: column; gap: 6mm;
       box-shadow: 0 8px 30px rgba(0,0,0,0.12);
       overflow: hidden;
+      color: var(--ink);
     }
-    .page > *:not(.deco) { position: relative; z-index: 1; }
+    .page > *:not(.deco):not(.frame) { position: relative; z-index: 1; }
     .page * { font-family: inherit; }
-    .deco { position: absolute; pointer-events: none; z-index: 0; }
-    .deco.tr { top: 0; right: 0; width: 46mm; }
-    .deco.bl { bottom: 0; left: 0; width: 52mm; transform: rotate(180deg); }
 
-    /* سرصفحه */
-    .head { text-align: center; display: flex; flex-direction: column; align-items: center; }
+    /* خطوط تزئینی گوشه‌ها */
+    .deco { position: absolute; pointer-events: none; z-index: 0; color: var(--deco); }
+    .deco.tr { top: 0; right: 0; width: 56mm; }
+    .deco.bl { bottom: 0; left: 0; width: 56mm; transform: rotate(180deg); }
+    /* قاب نازک دور صفحه */
+    .frame {
+      position: absolute; inset: 5mm; z-index: 0; pointer-events: none;
+      border: 0.25mm solid var(--rule); border-radius: 7mm; opacity: 0.9;
+    }
+
+    /* ---------------- سرصفحه ---------------- */
+    .head { display: grid; grid-template-columns: 1fr auto 1fr; align-items: start; }
+    .title-block { grid-column: 2; text-align: center; }
     .main-title {
       font-family: var(--font-title) !important;
-      font-size: calc(30pt * var(--font-scale));
-      font-weight: 800;
-      color: var(--title);
-      line-height: 1.15;
-      outline: none;
+      font-size: calc(30pt * var(--s-title));
+      font-weight: var(--w-title);
+      color: var(--title); line-height: 1.15; outline: none;
     }
     .sub-title {
       font-family: var(--font-decor) !important;
-      font-size: calc(21pt * var(--font-scale));
-      font-weight: 700;
-      color: var(--decor);
-      line-height: 1;
-      margin-top: 0;
-      outline: none;
+      font-size: calc(21pt * var(--s-decor));
+      font-weight: var(--w-decor);
+      color: var(--accent); line-height: 1; outline: none;
     }
+    .plan-no {
+      grid-column: 3; justify-self: end; margin-top: 2mm;
+      border: 0.3mm solid var(--line); border-radius: 3.5mm;
+      padding: 1.6mm 3mm 1.8mm; text-align: center; min-width: 27mm;
+    }
+    .plan-no .lbl { display: block; font-size: 7.5pt; font-weight: 500; color: var(--label); }
+    .plan-no .val {
+      display: block; min-height: 6mm; outline: none;
+      font-family: var(--font-title) !important;
+      font-size: calc(14pt * var(--s-title)); font-weight: var(--w-title);
+      color: var(--title); line-height: 1.3; white-space: nowrap; overflow: hidden;
+    }
+
     .info {
-      margin-top: 3mm;
-      width: 100%;
+      margin-top: 4mm;
       display: grid;
-      grid-template-columns: 1.6fr 1.6fr 1fr 1fr 1fr;
-      column-gap: 4mm;
-      align-items: end;
+      grid-template-columns: 1.7fr 1.7fr 1fr 1fr 1.25fr;
+      column-gap: 4mm; align-items: end;
     }
     .info-field { display: flex; align-items: flex-end; gap: 1.5mm; min-width: 0; }
-    .info-label {
-      font-size: calc(8.5pt * var(--font-scale));
-      font-weight: 500;
-      color: var(--label);
-      white-space: nowrap;
-    }
-    .info-label.ltr { direction: ltr; unicode-bidi: isolate; }
+    .info-label { font-size: 8.5pt; font-weight: 500; color: var(--label); white-space: nowrap; }
     .info-value {
       flex: 1; min-width: 0;
       border-bottom: 0.3mm solid var(--rule);
-      font-size: calc(9.5pt * var(--font-scale));
-      font-weight: 500;
-      line-height: 1.5;
-      min-height: 5.5mm;
-      white-space: nowrap; overflow: hidden;
-      outline: none;
-      text-align: center;
+      font-size: calc(9.5pt * var(--s-main)); font-weight: var(--w-main);
+      line-height: 1.5; min-height: 5.5mm;
+      white-space: nowrap; overflow: hidden; outline: none; text-align: center;
     }
-    .divider { display: flex; align-items: center; gap: 2mm; margin-top: 3mm; width: 60mm; }
-    .divider::before, .divider::after { content: ''; flex: 1; height: 0.25mm; background: var(--rule); }
-    .divider span { width: 1.6mm; height: 1.6mm; border-radius: 50%; background: var(--card-line); }
 
-    /* کارت‌های روزها: دو ستون، چهار ردیف، از ستون راست شروع می‌شود */
+    /* ---------------- کارت‌ها: دوتا دوتا کنار هم ---------------- */
     .days {
-      flex: 1;
-      min-height: 0;
+      flex: 1; min-height: 0;
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: repeat(4, 1fr);
-      grid-auto-flow: column;
       gap: 4.5mm 5mm;
     }
     .card {
-      border: 0.35mm solid var(--card-line);
+      border: 0.35mm solid var(--line);
       border-radius: 5mm;
-      background: rgba(255, 253, 249, 0.82);
+      background: var(--card);
       padding: 2mm 4mm 2.5mm;
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
+      display: flex; flex-direction: column; min-height: 0;
     }
     .card-title {
       font-family: var(--font-decor) !important;
       text-align: center;
-      font-size: calc(16pt * var(--font-scale));
-      font-weight: 700;
-      color: var(--title);
-      line-height: 1.25;
-      margin-bottom: 0.5mm;
+      font-size: calc(16pt * var(--s-decor));
+      font-weight: var(--w-decor);
+      color: var(--title); line-height: 1.25; margin-bottom: 0.5mm;
     }
-    .meal {
-      flex: 1;
-      min-height: 0;
-      display: grid;
-      grid-template-columns: 15mm 1fr;
-      column-gap: 2mm;
-      align-items: stretch;
-    }
-    .meal-label {
-      font-size: calc(8pt * var(--font-scale));
-      font-weight: 500;
-      color: var(--label);
-      align-self: end;
-      padding-bottom: 0.8mm;
-      white-space: nowrap;
-    }
+    .meal { flex: 1; min-height: 0; display: grid; grid-template-columns: 15mm 1fr; column-gap: 2mm; }
+    .meal.split { grid-template-columns: 15mm 1fr 2.5mm 1fr; column-gap: 1mm; }
+    .split-bar { align-self: end; justify-self: center; width: 0.3mm; height: 55%; background: var(--line); margin-bottom: 0.6mm; border-radius: 0.2mm; }
+    .meal-label { font-size: 8pt; font-weight: 500; color: var(--label); align-self: end; padding-bottom: 0.8mm; white-space: nowrap; }
     .cell {
       border-bottom: 0.3mm solid var(--rule);
-      font-size: calc(8.5pt * var(--font-scale));
-      line-height: 1.32;
-      padding: 0.6mm 0.5mm 0.4mm;
-      outline: none;
-      overflow: hidden;
-      word-break: break-word;
-      white-space: pre-wrap;
-      display: flex;
-      align-items: flex-end;
+      font-size: calc(8.5pt * var(--s-main)); font-weight: var(--w-main);
+      line-height: 1.32; padding: 0.6mm 0.5mm 0.4mm;
+      outline: none; overflow: hidden; word-break: break-word; white-space: pre-wrap;
+      display: flex; align-items: flex-end;
     }
-    .cell:focus { background: rgba(190, 169, 153, 0.12); border-radius: 1.5mm 1.5mm 0 0; }
-    .cell.overflow { box-shadow: inset 0 -2px 0 #D6964A; }
+    .cell:focus { background: color-mix(in srgb, var(--line) 14%, transparent); border-radius: 1.5mm 1.5mm 0 0; }
+    .cell.overflow, .notes-content.overflow { box-shadow: inset 0 -2px 0 #D6964A; }
 
-    /* کارت توصیه‌ها با خط‌های هم‌تراز با متن */
     .notes { --lh: 6.6mm; }
     .notes-content {
-      flex: 1;
-      min-height: 0;
-      font-size: calc(9pt * var(--font-scale));
+      flex: 1; min-height: 0;
+      font-size: calc(9pt * var(--s-main)); font-weight: var(--w-main);
       line-height: var(--lh);
       background-image: repeating-linear-gradient(to bottom,
         transparent 0, transparent calc(var(--lh) - 0.3mm),
         var(--rule) calc(var(--lh) - 0.3mm), var(--rule) var(--lh));
-      outline: none;
-      overflow: hidden;
-      white-space: pre-wrap;
-      word-break: break-word;
-      padding: 0 0.5mm;
+      outline: none; overflow: hidden; white-space: pre-wrap; word-break: break-word; padding: 0 0.5mm;
     }
-    .notes-content.overflow { box-shadow: inset 0 -2px 0 #D6964A; }
 
-    .foot { display: flex; justify-content: center; align-items: center; height: 9mm; }
-    .foot img { height: 8.5mm; width: auto; display: block; }
+    /* لوگو با رنگ پالت */
+    .foot { display: flex; justify-content: center; align-items: center; height: 8mm; }
+    .logo {
+      width: 28mm; height: 9.1mm; background: var(--accent);
+      -webkit-mask: url('logo.png') center / contain no-repeat;
+              mask: url('logo.png') center / contain no-repeat;
+    }
 
     @page { size: A4 portrait; margin: 0; }
     @media print {
       html, body {
-        background: #FFFFFF !important;
-        width: 210mm; height: 297mm;
+        background: #FFF !important; width: 210mm; height: 297mm;
         margin: 0 !important; padding: 0 !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
       }
       .toolbar { display: none !important; }
       .page { margin: 0 !important; box-shadow: none !important; page-break-after: avoid; page-break-inside: avoid; }
@@ -270,16 +245,13 @@
 <body>
 
   <div class="toolbar">
-    <div class="toolbar-group">
-      <label>فونت متن: <select id="fontMain"></select></label>
-      <label>فونت عنوان: <select id="fontTitle"></select></label>
-      <label>فونت روزها: <select id="fontDecor"></select></label>
-      <label>اندازه‌ی متن:
-        <input type="range" id="fontScale" min="0.8" max="1.25" step="0.05" value="1" />
-        <span id="scaleVal">۱۰۰٪</span>
-      </label>
-    </div>
-    <div class="toolbar-group">
+    <div class="tb-row" id="row-main"><span class="tb-name">متن</span></div>
+    <div class="tb-row" id="row-title"><span class="tb-name">عنوان</span></div>
+    <div class="tb-row" id="row-decor"><span class="tb-name">روزها</span></div>
+    <div class="tb-sep"></div>
+    <div class="tb-row"><span class="tb-name">رنگ</span><div class="swatches" id="swatches"></div></div>
+    <div class="tb-sep"></div>
+    <div class="tb-row">
       <button type="button" id="btnExport" title="برنامه را به‌صورت فایل روی دستگاه ذخیره می‌کند">ذخیره در فایل</button>
       <label class="btn-file" for="importFile" title="یک فایل برنامه‌ی ذخیره‌شده را باز می‌کند">باز کردن فایل</label>
       <input type="file" id="importFile" accept=".json,application/json" />
@@ -290,35 +262,51 @@
   </div>
 
   <main class="page" id="chartPage">
-    <svg class="deco tr" viewBox="0 0 280 220" fill="none" stroke="#C9B6A5" stroke-width="1.2" opacity="0.7">
-      <path d="M280 30 C 200 40, 150 90, 60 70 S -10 120, 0 160" />
-      <path d="M280 55 C 210 70, 170 120, 90 105 S 20 150, 30 210" />
+    <div class="frame"></div>
+    <svg class="deco tr" viewBox="0 0 300 240" fill="none" stroke="currentColor" stroke-linecap="round">
+      <path d="M300 18 C 228 24, 186 62, 128 58 C 74 54, 40 86, 22 140 C 14 166, 6 190, 0 214" stroke-width="1.1" opacity="0.85"/>
+      <path d="M300 40 C 236 48, 200 86, 146 84 C 96 82, 66 112, 50 160 C 42 186, 34 210, 26 240" stroke-width="0.8" opacity="0.6"/>
+      <path d="M300 62 C 246 72, 216 108, 166 110 C 122 112, 96 138, 82 180 C 76 200, 70 222, 64 240" stroke-width="0.6" opacity="0.4"/>
+      <circle cx="128" cy="58" r="2.2" fill="currentColor" stroke="none" opacity="0.8"/>
     </svg>
-    <svg class="deco bl" viewBox="0 0 320 240" fill="none" stroke="#C9B6A5" stroke-width="1.2" opacity="0.7">
-      <path d="M320 40 C 230 50, 180 100, 90 80 S 10 130, 20 180" />
-      <path d="M320 70 C 240 85, 200 135, 120 120 S 40 165, 50 230" />
+    <svg class="deco bl" viewBox="0 0 300 240" fill="none" stroke="currentColor" stroke-linecap="round">
+      <path d="M300 18 C 228 24, 186 62, 128 58 C 74 54, 40 86, 22 140 C 14 166, 6 190, 0 214" stroke-width="1.1" opacity="0.85"/>
+      <path d="M300 40 C 236 48, 200 86, 146 84 C 96 82, 66 112, 50 160 C 42 186, 34 210, 26 240" stroke-width="0.8" opacity="0.6"/>
+      <path d="M300 62 C 246 72, 216 108, 166 110 C 122 112, 96 138, 82 180 C 76 200, 70 222, 64 240" stroke-width="0.6" opacity="0.4"/>
+      <circle cx="128" cy="58" r="2.2" fill="currentColor" stroke="none" opacity="0.8"/>
     </svg>
 
-    <header class="head">
-      <h1 class="main-title" contenteditable="true" data-key="title">برنامه غذایی</h1>
-      <div class="sub-title" contenteditable="true" data-key="subtitle">هفتگی</div>
+    <header>
+      <div class="head">
+        <div class="title-block">
+          <h1 class="main-title" contenteditable="true" data-key="title">برنامه غذایی</h1>
+          <div class="sub-title" contenteditable="true" data-key="subtitle">هفتگی</div>
+        </div>
+        <div class="plan-no">
+          <span class="lbl">شماره برنامه</span>
+          <span class="val" contenteditable="true" data-key="planNo"></span>
+        </div>
+      </div>
       <div class="info">
         <div class="info-field"><span class="info-label">نام:</span><div class="info-value" contenteditable="true" data-key="name"></div></div>
         <div class="info-field"><span class="info-label">هدف:</span><div class="info-value" contenteditable="true" data-key="goal"></div></div>
         <div class="info-field"><span class="info-label">قد:</span><div class="info-value" contenteditable="true" data-key="height"></div></div>
         <div class="info-field"><span class="info-label">وزن:</span><div class="info-value" contenteditable="true" data-key="weight"></div></div>
-        <div class="info-field"><span class="info-label ltr">BMI:</span><div class="info-value" contenteditable="true" data-key="bmi"></div></div>
+        <div class="info-field"><span class="info-label">توده بدنی:</span><div class="info-value" contenteditable="true" data-key="bmi"></div></div>
       </div>
-      <div class="divider"><span></span></div>
     </header>
 
     <section class="days" id="days" aria-label="برنامه‌ی روزهای هفته"></section>
 
-    <footer class="foot"><img src="logo.png" alt="Trim – NACM Yoga" /></footer>
+    <footer class="foot"><div class="logo" role="img" aria-label="Trim – NACM Yoga"></div></footer>
   </main>
 
   <script>
-    // ---------- فهرست فونت‌ها ----------
+    const toFa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+    const toEn = s => String(s).replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[٫,]/g, '.');
+    const root = document.documentElement.style;
+
+    // ---------------- فونت‌ها ----------------
     const FONTS = [
       { id: 'iransans', name: 'ایران‌سنس', css: "'F-IRANSans'" },
       { id: 'yekan',    name: 'یکان',      css: "'F-Yekan'" },
@@ -327,55 +315,103 @@
       { id: 'lotus',    name: 'لوتوس',     css: "'F-Lotus'" },
       { id: 'nazanin',  name: 'نازنین',    css: "'F-Nazanin'" },
       { id: 'titr',     name: 'تیتر',      css: "'F-Titr'", noBody: true },
-      { id: 'tahoma',   name: 'تاهوما (سیستمی)', css: 'Tahoma' }
+      { id: 'tahoma',   name: 'تاهوما',    css: 'Tahoma' }
     ];
-    const FALLBACK = ", 'F-IRANSans', Tahoma, sans-serif";
-    const toFa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
-    const toEn = s => String(s).replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[٫,]/g, '.');
+    const WEIGHTS = [[300,'نازک'],[400,'معمولی'],[500,'متوسط'],[700,'ضخیم'],[800,'خیلی ضخیم'],[900,'سیاه']];
+    const GROUPS = {
+      main:  { font: 'iransans', size: 1, weight: 400 },
+      title: { font: 'pinar',    size: 1, weight: 800 },
+      decor: { font: 'lotus',    size: 1, weight: 700 }
+    };
+    const ctl = {};
+    for (const g of Object.keys(GROUPS)) {
+      const row = document.getElementById('row-' + g);
+      const font = document.createElement('select');
+      FONTS.forEach(f => { if (!(g === 'main' && f.noBody)) font.add(new Option(f.name, f.id)); });
+      const size = Object.assign(document.createElement('input'), { type: 'range', min: 0.7, max: 1.4, step: 0.05 });
+      const sizeVal = Object.assign(document.createElement('span'), { className: 'val' });
+      const weight = document.createElement('select');
+      WEIGHTS.forEach(([w, n]) => weight.add(new Option(n, w)));
+      const l1 = document.createElement('label'); l1.append('فونت ', font);
+      const l2 = document.createElement('label'); l2.append('اندازه ', size, sizeVal);
+      const l3 = document.createElement('label'); l3.append('ضخامت ', weight);
+      row.append(l1, l2, l3);
+      ctl[g] = { font, size, sizeVal, weight };
+      [font, weight].forEach(el => el.addEventListener('change', () => { applyType(); save(); }));
+      size.addEventListener('input', () => { applyType(); save(); });
+    }
+    function setType(state) {
+      for (const g of Object.keys(GROUPS)) {
+        const s = Object.assign({}, GROUPS[g], state && state[g]);
+        ctl[g].font.value = s.font; ctl[g].size.value = s.size; ctl[g].weight.value = s.weight;
+      }
+      applyType();
+    }
+    function getType() {
+      const o = {};
+      for (const g of Object.keys(GROUPS)) o[g] = { font: ctl[g].font.value, size: ctl[g].size.value, weight: ctl[g].weight.value };
+      return o;
+    }
+    function applyType() {
+      for (const g of Object.keys(GROUPS)) {
+        const f = FONTS.find(x => x.id === ctl[g].font.value) || FONTS[0];
+        root.setProperty('--font-' + g, f.css + ", 'F-IRANSans', Tahoma, sans-serif");
+        root.setProperty('--s-' + g, ctl[g].size.value);
+        root.setProperty('--w-' + g, ctl[g].weight.value);
+        ctl[g].sizeVal.textContent = toFa(Math.round(ctl[g].size.value * 100)) + '٪';
+      }
+      if (document.fonts) document.fonts.ready.then(() => setTimeout(checkOverflow, 50));
+      setTimeout(checkOverflow, 500);
+    }
 
-    // ---------- ساخت کارت‌ها ----------
+    // ---------------- پالت‌های رنگی ----------------
+    const PALETTES = {
+      cream: { name: 'کرم',     paper:'#F6F2EB', glow:'rgba(214,196,178,0.45)', ink:'#2E2A22', title:'#45432F', accent:'#7A6A58', label:'#6F6556', line:'#BEA999', rule:'#D6C9BE', card:'rgba(255,253,249,0.85)', deco:'#C2AD9B' },
+      sage:  { name: 'مریم‌گلی', paper:'#F1F3EE', glow:'rgba(178,194,168,0.42)', ink:'#252A22', title:'#3D4A35', accent:'#6E8060', label:'#5F6A57', line:'#A9B69E', rule:'#CBD3C3', card:'rgba(252,253,250,0.85)', deco:'#A7B59B' },
+      stone: { name: 'سنگی',     paper:'#F3F3F1', glow:'rgba(190,190,186,0.40)', ink:'#262626', title:'#33332F', accent:'#76756F', label:'#64635E', line:'#B3B2AC', rule:'#D3D2CD', card:'rgba(255,255,254,0.85)', deco:'#B4B3AD' },
+      rose:  { name: 'رز خاکی',  paper:'#F7F1EF', glow:'rgba(220,190,184,0.42)', ink:'#2F2726', title:'#553D3A', accent:'#9A716B', label:'#7A6461', line:'#CFAEA8', rule:'#E2CDC9', card:'rgba(255,252,251,0.85)', deco:'#CFAEA8' },
+      mist:  { name: 'آبی مه',   paper:'#F0F3F5', glow:'rgba(178,195,208,0.42)', ink:'#22282D', title:'#33424E', accent:'#677D8C', label:'#5B6872', line:'#A7B6C1', rule:'#CBD5DC', card:'rgba(252,253,254,0.85)', deco:'#A7B6C1' },
+      ink:   { name: 'سیاه و سفید', paper:'#FFFFFF', glow:'rgba(0,0,0,0)',       ink:'#111111', title:'#111111', accent:'#444444', label:'#555555', line:'#8C8C8C', rule:'#C9C9C9', card:'rgba(255,255,255,1)',   deco:'#BDBDBD' }
+    };
+    let palette = 'cream';
+    const swWrap = document.getElementById('swatches');
+    for (const [id, p] of Object.entries(PALETTES)) {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'swatch'; b.dataset.id = id;
+      b.innerHTML = `<i><b style="background:${p.paper}"></b><b style="background:${p.line}"></b><b style="background:${p.title}"></b></i>${p.name}`;
+      b.addEventListener('click', () => { applyPalette(id); save(); });
+      swWrap.append(b);
+    }
+    function applyPalette(id) {
+      palette = PALETTES[id] ? id : 'cream';
+      const p = PALETTES[palette];
+      for (const k of ['paper','glow','ink','title','accent','label','line','rule','card','deco']) root.setProperty('--' + k, p[k]);
+      swWrap.querySelectorAll('.swatch').forEach(b => b.classList.toggle('active', b.dataset.id === palette));
+    }
+
+    // ---------------- ساخت کارت‌ها ----------------
     const DAYS  = ['شنبه','یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنج‌شنبه','جمعه'];
-    const MEALS = ['صبحانه','میان‌وعده','ناهار','میان‌وعده','شام'];
+    // میان‌وعده یک ردیف است با دو خانه‌ی جدا
+    const MEALS = [['b','صبحانه'],['l','ناهار'],['d','شام'],['s','میان‌وعده', 2]];
     let html = '';
     DAYS.forEach((day, d) => {
       html += `<article class="card"><h2 class="card-title">${day}</h2>`;
-      MEALS.forEach((m, r) => {
-        html += `<div class="meal"><span class="meal-label">${m}</span><div class="cell" contenteditable="true" data-key="d${d}_m${r}"></div></div>`;
+      MEALS.forEach(([k, m, n]) => {
+        if (n === 2) {
+          html += `<div class="meal split"><span class="meal-label">${m}</span>`
+                + `<div class="cell" contenteditable="true" data-key="d${d}_${k}1"></div>`
+                + `<span class="split-bar"></span>`
+                + `<div class="cell" contenteditable="true" data-key="d${d}_${k}2"></div></div>`;
+        } else {
+          html += `<div class="meal"><span class="meal-label">${m}</span><div class="cell" contenteditable="true" data-key="d${d}_${k}"></div></div>`;
+        }
       });
       html += `</article>`;
     });
     html += `<article class="card notes"><h2 class="card-title">توصیه‌ها</h2><div class="notes-content" contenteditable="true" data-key="notes"></div></article>`;
     document.getElementById('days').innerHTML = html;
 
-    // ---------- فونت‌ها ----------
-    const sel = { main: document.getElementById('fontMain'), title: document.getElementById('fontTitle'), decor: document.getElementById('fontDecor') };
-    FONTS.forEach(f => {
-      if (!f.noBody) sel.main.add(new Option(f.name, f.id));
-      sel.title.add(new Option(f.name, f.id));
-      sel.decor.add(new Option(f.name, f.id));
-    });
-    const cssOf = id => (FONTS.find(f => f.id === id) || FONTS[0]).css + FALLBACK;
-    function applyFonts() {
-      const r = document.documentElement.style;
-      r.setProperty('--font-main', cssOf(sel.main.value));
-      r.setProperty('--font-title', cssOf(sel.title.value));
-      r.setProperty('--font-decor', cssOf(sel.decor.value));
-      if (document.fonts) document.fonts.ready.then(() => setTimeout(checkOverflow, 50));
-      setTimeout(checkOverflow, 600);
-    }
-    Object.values(sel).forEach(s => s.addEventListener('change', () => { applyFonts(); save(); }));
-
-    // ---------- اندازه‌ی متن ----------
-    const fontScale = document.getElementById('fontScale');
-    const scaleVal = document.getElementById('scaleVal');
-    function applyScale() {
-      document.documentElement.style.setProperty('--font-scale', fontScale.value);
-      scaleVal.textContent = toFa(Math.round(fontScale.value * 100)) + '٪';
-      checkOverflow();
-    }
-    fontScale.addEventListener('input', () => { applyScale(); save(); });
-
-    // ---------- محاسبه‌ی خودکار BMI ----------
+    // ---------------- توده بدنی خودکار ----------------
     const $ = k => document.querySelector(`[data-key="${k}"]`);
     let bmiManual = false;
     $('bmi').addEventListener('input', () => { bmiManual = $('bmi').innerText.trim() !== ''; });
@@ -384,32 +420,32 @@
       let h = parseFloat(toEn($('height').innerText).replace(/[^\d.]/g, ''));
       const w = parseFloat(toEn($('weight').innerText).replace(/[^\d.]/g, ''));
       if (!h || !w) { $('bmi').innerText = ''; return; }
-      if (h > 3) h = h / 100;               // سانتی‌متر به متر
+      if (h > 3) h = h / 100;
       const bmi = w / (h * h);
       $('bmi').innerText = (bmi > 8 && bmi < 80) ? toFa(bmi.toFixed(1)).replace('.', '٫') : '';
     }
 
-    // ---------- داده‌ها ----------
+    // ---------------- ذخیره و بازیابی ----------------
     const fields = () => document.querySelectorAll('[data-key]');
     const KEEP = ['title', 'subtitle'];
     function collect() {
-      const data = { v: 2, fontMain: sel.main.value, fontTitle: sel.title.value, fontDecor: sel.decor.value, scale: fontScale.value, bmiManual, fields: {} };
+      const data = { v: 3, type: getType(), palette, bmiManual, fields: {} };
       fields().forEach(el => { data.fields[el.dataset.key] = el.innerText.replace(/\n$/, ''); });
       return data;
     }
     function fill(data) {
       if (!data) return;
-      if (data.fontMain) sel.main.value = data.fontMain;
-      if (data.fontTitle) sel.title.value = data.fontTitle;
-      if (data.fontDecor) sel.decor.value = data.fontDecor;
-      if (data.scale) fontScale.value = data.scale;
+      // سازگاری با فایل‌های نسخه‌ی قبل
+      if (!data.type && data.fontMain) data.type = { main: { font: data.fontMain }, title: { font: data.fontTitle }, decor: { font: data.fontDecor } };
+      setType(data.type);
+      applyPalette(data.palette || 'cream');
       bmiManual = !!data.bmiManual;
       fields().forEach(el => {
         const v = data.fields && data.fields[el.dataset.key];
         if (typeof v === 'string') el.innerText = v;
         else if (!KEEP.includes(el.dataset.key)) el.innerText = '';
       });
-      applyFonts(); applyScale();
+      checkOverflow();
     }
 
     const STORE = 'nutrition-plan-v2';
@@ -428,20 +464,16 @@
       if (el.dataset.key === 'height' || el.dataset.key === 'weight') autoBMI();
       status.textContent = '…'; save(); checkOverflow();
     });
-
-    // چسباندن متن بدون قالب‌بندی
     document.addEventListener('paste', e => {
       const el = e.target.closest && e.target.closest('[contenteditable]');
       if (!el) return;
       e.preventDefault();
       document.execCommand('insertText', false, (e.clipboardData || window.clipboardData).getData('text/plain'));
     });
-    // اینتر در خانه‌های یک‌خطی کار نکند
     document.addEventListener('keydown', e => {
-      if (e.key === 'Enter' && e.target.matches && e.target.matches('.info-value, .main-title, .sub-title')) e.preventDefault();
+      if (e.key === 'Enter' && e.target.matches && e.target.matches('.info-value, .main-title, .sub-title, .plan-no .val')) e.preventDefault();
     });
 
-    // هشدار سرریز
     function checkOverflow() {
       document.querySelectorAll('.cell, .notes-content').forEach(el => {
         el.classList.toggle('overflow', el.scrollHeight > el.clientHeight + 1);
@@ -449,14 +481,14 @@
     }
     window.addEventListener('resize', checkOverflow);
 
-    // ---------- فایل ----------
     document.getElementById('btnExport').addEventListener('click', () => {
       const data = collect();
       const name = (data.fields.name || 'برنامه').trim().replace(/[\\/:*?"<>|]/g, '') || 'برنامه';
+      const no = (data.fields.planNo || '').trim().replace(/[\\/:*?"<>|]/g, '');
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `برنامه-غذایی_${name}.json`;
+      a.download = `برنامه-غذایی_${name}${no ? '_' + no : ''}.json`;
       document.body.appendChild(a); a.click(); a.remove();
       setTimeout(() => URL.revokeObjectURL(a.href), 1000);
     });
@@ -473,11 +505,10 @@
       bmiManual = false; save(); checkOverflow();
     });
 
-    // ---------- شروع ----------
-    sel.main.value = 'iransans'; sel.title.value = 'pinar'; sel.decor.value = 'lotus';
+    // ---------------- شروع ----------------
     let saved = null;
     try { saved = JSON.parse(localStorage.getItem(STORE)); } catch (e) {}
-    if (saved) fill(saved); else { applyFonts(); applyScale(); }
+    if (saved) fill(saved); else { setType(); applyPalette('cream'); }
   </script>
 </body>
 </html>
