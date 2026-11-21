@@ -258,6 +258,12 @@
     <div class="tb-row" id="row-title"><span class="tb-name">عنوان</span></div>
     <div class="tb-row" id="row-decor"><span class="tb-name">روزها</span></div>
     <div class="tb-sep"></div>
+    <div class="tb-row"><span class="tb-name">چیدمان</span>
+      <label><select id="layoutSel">
+        <option value="between">میان‌وعده‌ها بین وعده‌های اصلی</option>
+        <option value="paired">دو میان‌وعده در یک ردیف</option>
+      </select></label>
+    </div>
     <div class="tb-row"><span class="tb-name">رنگ</span><div class="swatches" id="swatches"></div></div>
     <div class="tb-sep"></div>
     <div class="tb-row">
@@ -401,25 +407,39 @@
 
     // ---------------- ساخت کارت‌ها ----------------
     const DAYS  = ['شنبه','یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنج‌شنبه','جمعه'];
-    // میان‌وعده یک ردیف است با دو خانه‌ی جدا
-    const MEALS = [['b','صبحانه'],['l','ناهار'],['d','شام'],['s','میان‌وعده', 2]];
-    let html = '';
-    DAYS.forEach((day, d) => {
-      html += `<article class="card"><h2 class="card-title">${day}</h2>`;
-      MEALS.forEach(([k, m, n]) => {
-        if (n === 2) {
-          html += `<div class="meal split"><span class="meal-label">${m}</span>`
-                + `<div class="cell" contenteditable="true" data-key="d${d}_${k}1"></div>`
-                + `<span class="split-bar"></span>`
-                + `<div class="cell" contenteditable="true" data-key="d${d}_${k}2"></div></div>`;
-        } else {
-          html += `<div class="meal"><span class="meal-label">${m}</span><div class="cell" contenteditable="true" data-key="d${d}_${k}"></div></div>`;
-        }
+    // دو چیدمان: میان‌وعده‌ها بین وعده‌های اصلی (پیش‌فرض)، یا هر دو در یک ردیف با خط جداکننده
+    const LAYOUTS = {
+      between: [['b','صبحانه'],['s1','میان‌وعده'],['l','ناهار'],['s2','میان‌وعده'],['d','شام']],
+      paired:  [['b','صبحانه'],['l','ناهار'],['d','شام'],[['s1','s2'],'میان‌وعده']]
+    };
+    let layout = 'between';
+    function renderDays(id) {
+      layout = LAYOUTS[id] ? id : 'between';
+      let html = '';
+      DAYS.forEach((day, d) => {
+        html += `<article class="card"><h2 class="card-title">${day}</h2>`;
+        LAYOUTS[layout].forEach(([k, m]) => {
+          if (Array.isArray(k)) {
+            html += `<div class="meal split"><span class="meal-label">${m}</span>`
+                  + `<div class="cell" contenteditable="true" data-key="d${d}_${k[0]}"></div>`
+                  + `<span class="split-bar"></span>`
+                  + `<div class="cell" contenteditable="true" data-key="d${d}_${k[1]}"></div></div>`;
+          } else {
+            html += `<div class="meal"><span class="meal-label">${m}</span><div class="cell" contenteditable="true" data-key="d${d}_${k}"></div></div>`;
+          }
+        });
+        html += `</article>`;
       });
-      html += `</article>`;
+      html += `<article class="card notes"><h2 class="card-title">توصیه‌ها</h2><div class="notes-content" contenteditable="true" data-key="notes"></div></article>`;
+      document.getElementById('days').innerHTML = html;
+    }
+    renderDays('between');
+    const layoutSel = document.getElementById('layoutSel');
+    layoutSel.addEventListener('change', () => {
+      const data = collect();       // نوشته‌ها حفظ می‌شوند
+      data.layout = layoutSel.value;
+      fill(data); save();
     });
-    html += `<article class="card notes"><h2 class="card-title">توصیه‌ها</h2><div class="notes-content" contenteditable="true" data-key="notes"></div></article>`;
-    document.getElementById('days').innerHTML = html;
 
     // ---------------- توده بدنی خودکار ----------------
     const $ = k => document.querySelector(`[data-key="${k}"]`);
@@ -439,7 +459,7 @@
     const fields = () => document.querySelectorAll('[data-key]');
     const KEEP = ['title', 'subtitle'];
     function collect() {
-      const data = { v: 3, type: getType(), palette, bmiManual, fields: {} };
+      const data = { v: 4, type: getType(), palette, layout, bmiManual, fields: {} };
       fields().forEach(el => { data.fields[el.dataset.key] = el.innerText.replace(/\n$/, ''); });
       return data;
     }
@@ -447,6 +467,7 @@
       if (!data) return;
       // سازگاری با فایل‌های نسخه‌ی قبل
       if (!data.type && data.fontMain) data.type = { main: { font: data.fontMain }, title: { font: data.fontTitle }, decor: { font: data.fontDecor } };
+      renderDays(data.layout || 'between'); layoutSel.value = layout;
       setType(data.type);
       applyPalette(data.palette || 'moor');
       bmiManual = !!data.bmiManual;
