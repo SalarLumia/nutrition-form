@@ -8,15 +8,15 @@
   <style>
     /* ایران‌سنس: اگر روی سیستم نصب باشد از همان، وگرنه از پوشه‌ی fonts */
     @font-face { font-family: 'F-IRANSans'; font-weight: 100 200; font-display: swap;
-      src: local('IRANSans UltraLight'), local('IRANSans-UltraLight'), url('fonts/iransans-200.woff2') format('woff2'), url('fonts/IRANSans_UltraLight.ttf') format('truetype'); }
+      src: local('IRANSans UltraLight'), local('IRANSans-UltraLight'), url('fonts/iransans-200.woff2') format('woff2'); }
     @font-face { font-family: 'F-IRANSans'; font-weight: 300; font-display: swap;
-      src: local('IRANSans Light'), local('IRANSans-Light'), url('fonts/iransans-300.woff2') format('woff2'), url('fonts/IRANSans_Light.ttf') format('truetype'); }
+      src: local('IRANSans Light'), local('IRANSans-Light'), url('fonts/iransans-300.woff2') format('woff2'); }
     @font-face { font-family: 'F-IRANSans'; font-weight: 400; font-display: swap;
-      src: local('IRANSans'), local('IRANSansWeb'), url('fonts/iransans-400.woff2') format('woff2'), url('fonts/IRANSans.ttf') format('truetype'); }
+      src: local('IRANSans'), local('IRANSansWeb'), url('fonts/iransans-400.woff2') format('woff2'); }
     @font-face { font-family: 'F-IRANSans'; font-weight: 500 600; font-display: swap;
-      src: local('IRANSans Medium'), local('IRANSans-Medium'), url('fonts/iransans-500.woff2') format('woff2'), url('fonts/IRANSans_Medium.ttf') format('truetype'); }
+      src: local('IRANSans Medium'), local('IRANSans-Medium'), url('fonts/iransans-500.woff2') format('woff2'); }
     @font-face { font-family: 'F-IRANSans'; font-weight: 700 900; font-display: swap;
-      src: local('IRANSans Bold'), local('IRANSans-Bold'), url('fonts/iransans-700.woff2') format('woff2'), url('fonts/IRANSans_Bold.ttf') format('truetype'); }
+      src: local('IRANSans Bold'), local('IRANSans-Bold'), url('fonts/iransans-700.woff2') format('woff2'); }
 
     /* یکان و نازنین یک وزن دارند؛ مرورگر نسخه‌ی پررنگ را خودش می‌سازد */
     @font-face { font-family: 'F-Yekan'; font-weight: 400; font-display: swap;
@@ -251,11 +251,15 @@
 
     /* لوگو با رنگ پالت */
     .foot { display: flex; justify-content: center; align-items: center; height: 8mm; }
-    .logo {
-      width: 28mm; height: 9.1mm; background: var(--accent);
-      -webkit-mask: url('logo.png') center / contain no-repeat;
-              mask: url('logo.png') center / contain no-repeat;
-    }
+    .logo { width: 28mm; height: auto; display: block; }
+    /* هنگام ساختن فایل دانلود، نشانه‌های ویرایش دیده نشوند */
+    .exporting .cell.overflow, .exporting .notes-content.overflow { box-shadow: none; }
+    .exporting .cell:focus { background: none; }
+    .dl-wrap { position: relative; }
+    .dl-menu { position: absolute; top: calc(100% + 4px); right: 0; z-index: 20; background: #FFF; border: 1px solid #DCD4CA; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); padding: 5px; display: flex; flex-direction: column; gap: 3px; min-width: 150px; }
+    .dl-menu[hidden] { display: none; }
+    .toolbar .dl-menu button { border: none; background: none; text-align: right; font-weight: 500; }
+    .toolbar .dl-menu button:hover { background: #F6F2EB; }
 
     @page { size: A4 portrait; margin: 0; }
     @media print {
@@ -298,7 +302,13 @@
       <label class="btn-file" for="importFile" title="یک فایل برنامه‌ی ذخیره‌شده را باز می‌کند">باز کردن فایل</label>
       <input type="file" id="importFile" accept=".json,application/json" />
       <button type="button" id="btnClear">برنامه‌ی جدید</button>
-      <button type="button" class="btn-primary" onclick="window.print()">چاپ / ذخیره‌ی PDF</button>
+      <span class="dl-wrap">
+        <button type="button" class="btn-primary" id="btnDownload">دانلود ▾</button>
+        <span class="dl-menu" id="dlMenu" hidden>
+          <button type="button" data-kind="png">تصویر (PNG)</button>
+          <button type="button" data-kind="pdf">PDF</button>
+        </span>
+      </span>
       <span id="saveStatus" class="save-status"></span>
     </div>
   </div>
@@ -341,7 +351,7 @@
 
     <section class="days" id="days" aria-label="برنامه‌ی روزهای هفته"></section>
 
-    <footer class="foot"><div class="logo" role="img" aria-label="Trim – NACM Yoga"></div></footer>
+    <footer class="foot"><img class="logo" id="logoImg" alt="Trim – NACM Yoga" /></footer>
   </main>
 
   <script>
@@ -431,6 +441,21 @@
       const p = PALETTES[palette];
       for (const k of ['paper','glow','ink','title','accent','label','line','rule','card','deco']) root.setProperty('--' + k, p[k]);
       swWrap.querySelectorAll('.swatch').forEach(b => b.classList.toggle('active', b.dataset.id === palette));
+      tintLogo(p.accent);
+    }
+    // لوگو با رنگ پالت؛ به‌صورت تصویر واقعی تا در فایل دانلودی هم بیاید
+    const logoSrc = new Image();
+    let logoReady = new Promise(r => { logoSrc.onload = r; });
+    logoSrc.src = 'logo.png';
+    async function tintLogo(color) {
+      await logoReady;
+      const c = document.createElement('canvas');
+      c.width = logoSrc.naturalWidth; c.height = logoSrc.naturalHeight;
+      const g = c.getContext('2d');
+      g.drawImage(logoSrc, 0, 0);
+      g.globalCompositeOperation = 'source-in';
+      g.fillStyle = color; g.fillRect(0, 0, c.width, c.height);
+      document.getElementById('logoImg').src = c.toDataURL('image/png');
     }
 
     // ---------------- ساخت کارت‌ها ----------------
@@ -581,6 +606,47 @@
       if (window.onPlanCleared) window.onPlanCleared();
     });
 
+    // ---------------- دانلود رنگی (بدون پنجره‌ی چاپ) ----------------
+    const dlMenu = document.getElementById('dlMenu');
+    document.getElementById('btnDownload').addEventListener('click', e => { e.stopPropagation(); dlMenu.hidden = !dlMenu.hidden; });
+    document.addEventListener('click', () => { dlMenu.hidden = true; });
+    let jspdfLoading = null;
+    const loadJsPDF = () => jspdfLoading || (jspdfLoading = new Promise((res, rej) => {
+      const sc = document.createElement('script'); sc.src = 'lib/jspdf.umd.min.js'; sc.onload = res; sc.onerror = rej; document.head.append(sc);
+    }));
+    function fileBase() {
+      const f = collect().fields;
+      const clean = v => (v || '').trim().replace(/[\\/:*?"<>|]/g, '');
+      const no = clean(f.planNo);
+      return `برنامه-غذایی_${clean(f.name) || 'برنامه'}${no ? '_' + no : ''}`;
+    }
+    dlMenu.querySelectorAll('button').forEach(btn => btn.addEventListener('click', async () => {
+      dlMenu.hidden = true;
+      const kind = btn.dataset.kind;
+      const page = document.getElementById('chartPage');
+      status.textContent = 'در حال ساختن فایل…';
+      if (document.activeElement) document.activeElement.blur();
+      getSelection().removeAllRanges();
+      page.classList.add('exporting');
+      try {
+        await document.fonts.ready; await logoReady;
+        const opts = { pixelRatio: 2.5, style: { margin: '0', boxShadow: 'none' } };
+        const a = document.createElement('a');
+        if (kind === 'png') {
+          a.href = await htmlToImage.toPng(page, opts);
+          a.download = fileBase() + '.png'; a.click();
+        } else {
+          const [img] = await Promise.all([htmlToImage.toJpeg(page, { ...opts, quality: 0.93 }), loadJsPDF()]);
+          const pdf = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+          pdf.addImage(img, 'JPEG', 0, 0, 210, 297);
+          pdf.save(fileBase() + '.pdf');
+        }
+        status.textContent = 'فایل دانلود شد ✓';
+      } catch (err) {
+        console.error(err); status.textContent = 'ساختن فایل انجام نشد';
+      } finally { page.classList.remove('exporting'); }
+    }));
+
     // ---------------- شروع ----------------
     let saved = null;
     try { saved = JSON.parse(localStorage.getItem(STORE)); } catch (e) {}
@@ -601,6 +667,7 @@
     </div>
   </div>
 
+  <script src="lib/html-to-image.js"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="drive.js"></script>
 </body>
