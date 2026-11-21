@@ -51,17 +51,17 @@
       --s-main: 1;  --s-title: 1;  --s-decor: 1;
       --w-main: 400; --w-title: 800; --w-decor: 700;
 
-      /* پالت پیش‌فرض: کرم */
-      --paper: #F6F2EB;
-      --glow: rgba(214,196,178,0.45);
-      --ink: #2E2A22;
-      --title: #45432F;
-      --accent: #7A6A58;
-      --label: #6F6556;
-      --line: #BEA999;
-      --rule: #D6C9BE;
-      --card: rgba(255,253,249,0.85);
-      --deco: #C2AD9B;
+      /* پالت پیش‌فرض: خلنگزار */
+      --paper: #F6F1EA;
+      --glow: rgba(219,200,182,0.55);
+      --ink: #2C3328;
+      --title: #3E4938;
+      --accent: #6A7866;
+      --label: #6A7866;
+      --line: #B3A08E;
+      --rule: #DBC8B6;
+      --card: rgba(255,252,248,0.86);
+      --deco: #94A596;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -366,15 +366,15 @@
     }
 
     // ---------------- پالت‌های رنگی ----------------
+    // همه‌ی پالت‌ها از یک طیف: سبز سنگ‌مس ۳E4938، صنوبر ۶A7866، باغ ۹۴A596، بژ ۹B3A08E، کرم کاکائو DBC8B6
     const PALETTES = {
-      cream: { name: 'کرم',     paper:'#F6F2EB', glow:'rgba(214,196,178,0.45)', ink:'#2E2A22', title:'#45432F', accent:'#7A6A58', label:'#6F6556', line:'#BEA999', rule:'#D6C9BE', card:'rgba(255,253,249,0.85)', deco:'#C2AD9B' },
-      sage:  { name: 'مریم‌گلی', paper:'#F1F3EE', glow:'rgba(178,194,168,0.42)', ink:'#252A22', title:'#3D4A35', accent:'#6E8060', label:'#5F6A57', line:'#A9B69E', rule:'#CBD3C3', card:'rgba(252,253,250,0.85)', deco:'#A7B59B' },
-      stone: { name: 'سنگی',     paper:'#F3F3F1', glow:'rgba(190,190,186,0.40)', ink:'#262626', title:'#33332F', accent:'#76756F', label:'#64635E', line:'#B3B2AC', rule:'#D3D2CD', card:'rgba(255,255,254,0.85)', deco:'#B4B3AD' },
-      rose:  { name: 'رز خاکی',  paper:'#F7F1EF', glow:'rgba(220,190,184,0.42)', ink:'#2F2726', title:'#553D3A', accent:'#9A716B', label:'#7A6461', line:'#CFAEA8', rule:'#E2CDC9', card:'rgba(255,252,251,0.85)', deco:'#CFAEA8' },
-      mist:  { name: 'آبی مه',   paper:'#F0F3F5', glow:'rgba(178,195,208,0.42)', ink:'#22282D', title:'#33424E', accent:'#677D8C', label:'#5B6872', line:'#A7B6C1', rule:'#CBD5DC', card:'rgba(252,253,254,0.85)', deco:'#A7B6C1' },
-      ink:   { name: 'سیاه و سفید', paper:'#FFFFFF', glow:'rgba(0,0,0,0)',       ink:'#111111', title:'#111111', accent:'#444444', label:'#555555', line:'#8C8C8C', rule:'#C9C9C9', card:'rgba(255,255,255,1)',   deco:'#BDBDBD' }
+      moor:   { name: 'خلنگزار',  paper:'#F6F1EA', glow:'rgba(219,200,182,0.55)', ink:'#2C3328', title:'#3E4938', accent:'#6A7866', label:'#6A7866', line:'#B3A08E', rule:'#DBC8B6', card:'rgba(255,252,248,0.86)', deco:'#94A596' },
+      spruce: { name: 'صنوبر',    paper:'#EEF1EC', glow:'rgba(148,165,150,0.40)', ink:'#283024', title:'#3E4938', accent:'#3E4938', label:'#6A7866', line:'#94A596', rule:'#C5D0C4', card:'rgba(251,252,250,0.88)', deco:'#94A596' },
+      garden: { name: 'باغ',      paper:'#F4F2EC', glow:'rgba(148,165,150,0.30)', ink:'#2F362B', title:'#6A7866', accent:'#94A596', label:'#7D8A79', line:'#94A596', rule:'#D6D9CF', card:'rgba(255,254,250,0.86)', deco:'#B3A08E' },
+      beige:  { name: 'بژ طلایی', paper:'#F7F1E9', glow:'rgba(179,160,142,0.40)', ink:'#33302A', title:'#3E4938', accent:'#B3A08E', label:'#8A7968', line:'#B3A08E', rule:'#E0D2C4', card:'rgba(255,251,246,0.86)', deco:'#B3A08E' },
+      cocoa:  { name: 'کاکائو',   paper:'#EDE2D5', glow:'rgba(255,255,255,0.40)', ink:'#2C3328', title:'#3E4938', accent:'#6A7866', label:'#6A7866', line:'#B3A08E', rule:'#D3C1AE', card:'rgba(250,246,240,0.93)', deco:'#B3A08E' }
     };
-    let palette = 'cream';
+    let palette = 'moor';
     const swWrap = document.getElementById('swatches');
     for (const [id, p] of Object.entries(PALETTES)) {
       const b = document.createElement('button');
@@ -384,7 +384,7 @@
       swWrap.append(b);
     }
     function applyPalette(id) {
-      palette = PALETTES[id] ? id : 'cream';
+      palette = PALETTES[id] ? id : 'moor';
       const p = PALETTES[palette];
       for (const k of ['paper','glow','ink','title','accent','label','line','rule','card','deco']) root.setProperty('--' + k, p[k]);
       swWrap.querySelectorAll('.swatch').forEach(b => b.classList.toggle('active', b.dataset.id === palette));
@@ -439,7 +439,7 @@
       // سازگاری با فایل‌های نسخه‌ی قبل
       if (!data.type && data.fontMain) data.type = { main: { font: data.fontMain }, title: { font: data.fontTitle }, decor: { font: data.fontDecor } };
       setType(data.type);
-      applyPalette(data.palette || 'cream');
+      applyPalette(data.palette || 'moor');
       bmiManual = !!data.bmiManual;
       fields().forEach(el => {
         const v = data.fields && data.fields[el.dataset.key];
@@ -525,7 +525,7 @@
     // ---------------- شروع ----------------
     let saved = null;
     try { saved = JSON.parse(localStorage.getItem(STORE)); } catch (e) {}
-    if (saved) fill(saved); else { setType(); applyPalette('cream'); }
+    if (saved) fill(saved); else { setType(); applyPalette('moor'); }
   </script>
 </body>
 </html>
