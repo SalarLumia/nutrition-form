@@ -75,39 +75,73 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { font-family: var(--font-main); background: #E4DFD8; color: var(--ink); -webkit-font-smoothing: antialiased; }
 
-    /* ---------------- نوار ابزار (در چاپ مخفی) ---------------- */
+    /* ---------------- نوار بالا (در چاپ و دانلود دیده نمی‌شود) ---------------- */
+    body { padding-top: 76px; }
     .toolbar {
-      font-family: 'F-Shabnam', Tahoma, sans-serif;
-      max-width: 210mm; margin: 14px auto 10px; padding: 12px 14px;
-      background: #FFF; border: 1px solid #DCD4CA; border-radius: 12px;
-      display: flex; flex-direction: column; gap: 9px;
-      font-size: 12px; color: #5E564C;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      position: fixed; top: 0; inset-inline: 0; z-index: 40;
+      height: 58px; padding: 0 18px;
+      display: flex; align-items: center; gap: 14px;
+      background: rgba(255,255,255,0.92); backdrop-filter: blur(10px);
+      border-bottom: 1px solid #ECE6DE; box-shadow: 0 1px 10px rgba(40,35,25,0.05);
+      font-family: 'F-Shabnam', Tahoma, sans-serif; font-size: 13px; color: #2E2A22;
     }
-    .tb-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .tb-row .tb-name { width: 4.6em; font-weight: 700; color: #3A352D; }
-    .tb-row label { display: flex; align-items: center; gap: 5px; }
-    .tb-sep { height: 1px; background: #EEE8E0; }
-    .toolbar button, .toolbar select, .toolbar .btn-file {
-      font-family: inherit; font-size: 12px; font-weight: 700;
-      padding: 6px 11px; border-radius: 8px;
-      border: 1px solid #CDBFB2; background: #FAF7F2; color: #2E2A22; cursor: pointer;
+    .tb-brand { display: flex; flex-direction: column; line-height: 1.25; min-width: 150px; }
+    .tb-brand b { font-size: 14px; color: #3E4938; }
+    .tb-brand span { font-size: 11px; color: #8A8175; min-height: 14px; }
+    .tb-mid { flex: 1; display: flex; justify-content: center; gap: 6px; }
+    .tb-end { display: flex; align-items: center; gap: 8px; }
+    .tbtn {
+      font-family: inherit; font-size: 13px; font-weight: 500; color: #2E2A22;
+      display: inline-flex; align-items: center; gap: 7px;
+      height: 38px; padding: 0 13px; border-radius: 10px;
+      border: 1px solid transparent; background: none; cursor: pointer; white-space: nowrap;
     }
-    .toolbar select { font-weight: 500; padding: 4px 6px; }
-    .toolbar input[type="range"] { width: 90px; }
-    .toolbar .val { min-width: 2.6em; color: #8A7F72; }
-    .toolbar button:hover, .toolbar .btn-file:hover { background: #F1EAE0; }
-    .toolbar .btn-primary { background: #3A372B; border-color: #3A372B; color: #FFF; }
-    .toolbar input[type="file"] { display: none; }
-    .save-status { font-size: 11.5px; color: #6B7A45; margin-inline-start: auto; }
-    .swatches { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tbtn svg { width: 18px; height: 18px; flex: none; }
+    .tbtn:hover, .tbtn.open { background: #F3EFE9; }
+    .tbtn.icon { padding: 0; width: 38px; justify-content: center; }
+    .tbtn.ghost { border-color: #E3DCD2; }
+    .tbtn.primary { background: #3E4938; color: #FFF; font-weight: 700; }
+    .tbtn.primary:hover { background: #4B5844; }
+    .tbtn.dark { background: #2E2A22; color: #FFF; font-weight: 700; }
+    .tbtn.dark:hover { background: #423C32; }
+    .tbtn.icon { position: relative; }
+    .tbtn.icon.ok::after { content: ''; position: absolute; top: 8px; left: 8px; width: 7px; height: 7px; border-radius: 50%; background: #6A9A5B; box-shadow: 0 0 0 2px #FFF; }
+    .tb-div { width: 1px; height: 26px; background: #ECE6DE; margin: 0 4px; }
+
+    /* پنجره‌های کوچک زیر دکمه‌ها */
+    .pop-wrap { position: relative; }
+    .pop {
+      position: absolute; top: calc(100% + 8px); right: 0; z-index: 45;
+      background: #FFF; border: 1px solid #ECE6DE; border-radius: 14px;
+      box-shadow: 0 14px 40px rgba(40,35,25,0.14);
+      padding: 14px; display: flex; flex-direction: column; gap: 12px;
+    }
+    .pop[hidden] { display: none; }
+    .pop.left { right: auto; left: 0; }
+    .pop h4 { font-size: 12px; color: #8A8175; font-weight: 500; }
+    .tb-row { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+    .tb-row .tb-name { width: 3.4em; font-weight: 700; }
+    .tb-row label { display: flex; align-items: center; gap: 5px; color: #6A6055; font-size: 12px; }
+    .pop select { font-family: inherit; font-size: 12px; padding: 5px 6px; border: 1px solid #E3DCD2; border-radius: 8px; background: #FAF8F5; }
+    .pop input[type="range"] { width: 90px; accent-color: #3E4938; }
+    .pop .val { min-width: 2.6em; color: #8A8175; font-size: 12px; }
+    .swatches { display: grid; grid-template-columns: repeat(5, auto); gap: 8px; }
     .swatch {
-      display: flex; align-items: center; gap: 5px;
-      padding: 4px 9px 4px 6px !important; font-weight: 500 !important;
+      font-family: inherit; font-size: 11.5px; color: #2E2A22;
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
+      padding: 6px; border: 1px solid transparent; border-radius: 10px; background: none; cursor: pointer;
     }
-    .swatch i { display: inline-flex; width: 26px; height: 14px; border-radius: 7px; overflow: hidden; border: 1px solid rgba(0,0,0,0.12); }
+    .swatch i { display: flex; width: 54px; height: 34px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(0,0,0,0.08); }
     .swatch i b { flex: 1; }
-    .swatch.active { outline: 2px solid #3A372B; outline-offset: 1px; }
+    .swatch:hover { background: #F6F2EB; }
+    .swatch.active { border-color: #3E4938; }
+    .seg { display: flex; background: #F3EFE9; border-radius: 10px; padding: 3px; gap: 3px; }
+    .seg button { font-family: inherit; font-size: 12px; border: none; background: none; padding: 7px 12px; border-radius: 8px; cursor: pointer; color: #5E564C; white-space: nowrap; }
+    .seg button.active { background: #FFF; color: #2E2A22; font-weight: 700; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .menu { padding: 6px; gap: 2px; min-width: 160px; }
+    .menu button { font-family: inherit; font-size: 13px; text-align: right; border: none; background: none; padding: 9px 10px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .menu button:hover { background: #F3EFE9; }
+    @media (max-width: 900px) { .tbtn .lbl { display: none; } .tb-brand { min-width: 0; } }
 
     /* ---------------- پنجره‌ی فهرست درایو ---------------- */
     .dm { position: fixed; inset: 0; z-index: 50; background: rgba(30,28,24,0.35); display: flex; align-items: center; justify-content: center; font-family: 'F-Shabnam', Tahoma, sans-serif; }
@@ -255,11 +289,6 @@
     /* هنگام ساختن فایل دانلود، نشانه‌های ویرایش دیده نشوند */
     .exporting .cell.overflow, .exporting .notes-content.overflow { box-shadow: none; }
     .exporting .cell:focus { background: none; }
-    .dl-wrap { position: relative; }
-    .dl-menu { position: absolute; top: calc(100% + 4px); right: 0; z-index: 20; background: #FFF; border: 1px solid #DCD4CA; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); padding: 5px; display: flex; flex-direction: column; gap: 3px; min-width: 150px; }
-    .dl-menu[hidden] { display: none; }
-    .toolbar .dl-menu button { border: none; background: none; text-align: right; font-weight: 500; }
-    .toolbar .dl-menu button:hover { background: #F6F2EB; }
 
     @page { size: A4 portrait; margin: 0; }
     @media print {
@@ -269,6 +298,7 @@
         -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
       }
       .toolbar, .dm { display: none !important; }
+      body { padding-top: 0 !important; }
       .page { margin: 0 !important; box-shadow: none !important; page-break-after: avoid; page-break-inside: avoid; }
       .cell.overflow, .notes-content.overflow { box-shadow: none; }
       .cell:focus { background: none; }
@@ -278,35 +308,48 @@
 <body>
 
   <div class="toolbar">
-    <div class="tb-row" id="row-main"><span class="tb-name">متن</span></div>
-    <div class="tb-row" id="row-title"><span class="tb-name">عنوان</span></div>
-    <div class="tb-row" id="row-decor"><span class="tb-name">روزها</span></div>
-    <div class="tb-sep"></div>
-    <div class="tb-row"><span class="tb-name">چیدمان</span>
-      <label><select id="layoutSel">
-        <option value="between">میان‌وعده‌ها بین وعده‌های اصلی</option>
-        <option value="paired">دو میان‌وعده در یک ردیف</option>
-      </select></label>
+    <div class="tb-brand"><b>برنامه غذایی</b><span id="saveStatus"></span></div>
+
+    <div class="tb-mid">
+      <div class="pop-wrap">
+        <button type="button" class="tbtn" data-pop="popType"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2M9 19h6M12 5v14"/></svg><span class="lbl">فونت</span></button>
+        <div class="pop" id="popType" hidden>
+          <div class="tb-row" id="row-main"><span class="tb-name">متن</span></div>
+          <div class="tb-row" id="row-title"><span class="tb-name">عنوان</span></div>
+          <div class="tb-row" id="row-decor"><span class="tb-name">روزها</span></div>
+        </div>
+      </div>
+      <div class="pop-wrap">
+        <button type="button" class="tbtn" data-pop="popColor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.7-.9 1.4-1.8-.4-1.2.4-2.2 1.6-2.2H17a4 4 0 0 0 4-4c0-5.5-4-10-9-10z"/><circle cx="7.5" cy="11" r="1.2"/><circle cx="10.5" cy="7" r="1.2"/><circle cx="15.5" cy="8" r="1.2"/></svg><span class="lbl">رنگ</span></button>
+        <div class="pop" id="popColor" hidden><h4>پالت رنگی</h4><div class="swatches" id="swatches"></div></div>
+      </div>
+      <div class="pop-wrap">
+        <button type="button" class="tbtn" data-pop="popLayout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 9.5h16M4 14.5h16"/></svg><span class="lbl">چیدمان</span></button>
+        <div class="pop" id="popLayout" hidden>
+          <h4>جای میان‌وعده‌ها</h4>
+          <div class="seg" id="layoutSeg">
+            <button type="button" data-layout="between">بین وعده‌های اصلی</button>
+            <button type="button" data-layout="paired">دو تا در یک ردیف</button>
+          </div>
+          <select id="layoutSel" hidden><option value="between"></option><option value="paired"></option></select>
+        </div>
+      </div>
+      <span class="tb-div"></span>
+      <button type="button" class="tbtn" id="btnClear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span class="lbl">برنامه‌ی جدید</span></button>
     </div>
-    <div class="tb-row"><span class="tb-name">رنگ</span><div class="swatches" id="swatches"></div></div>
-    <div class="tb-sep"></div>
-    <div class="tb-row"><span class="tb-name">درایو</span>
-      <button type="button" id="btnDriveLogin">وارد کردن رمز درایو</button>
-      <button type="button" id="btnDriveSave" class="btn-primary">ذخیره در درایو</button>
-      <button type="button" id="btnDriveList">فهرست برنامه‌ها</button>
-      <span id="driveStatus" class="save-status"></span>
-    </div>
-    <div class="tb-sep"></div>
-    <div class="tb-row">
-      <button type="button" id="btnClear">برنامه‌ی جدید</button>
-      <span class="dl-wrap">
-        <button type="button" class="btn-primary" id="btnDownload">دانلود ▾</button>
-        <span class="dl-menu" id="dlMenu" hidden>
+
+    <div class="tb-end">
+      <span class="tb-brand" style="min-width:0;text-align:left"><span id="driveStatus"></span></span>
+      <button type="button" class="tbtn icon" id="btnDriveLogin" title="رمز درایو"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3"/></svg></button>
+      <button type="button" class="tbtn ghost" id="btnDriveList"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span class="lbl">برنامه‌ها</span></button>
+      <button type="button" class="tbtn primary" id="btnDriveSave"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18a4.5 4.5 0 0 1-.5-9A6 6 0 0 1 18 9.5a4 4 0 0 1-.5 8.5z"/><path d="M12 11v5M9.5 13.5 12 11l2.5 2.5"/></svg><span class="lbl">ذخیره در درایو</span></button>
+      <div class="pop-wrap">
+        <button type="button" class="tbtn dark" id="btnDownload" data-pop="dlMenu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14"/></svg><span class="lbl">دانلود</span></button>
+        <div class="pop menu left" id="dlMenu" hidden>
           <button type="button" data-kind="png">تصویر (PNG)</button>
           <button type="button" data-kind="pdf">PDF</button>
-        </span>
-      </span>
-      <span id="saveStatus" class="save-status"></span>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -485,6 +528,10 @@
     }
     renderDays('between');
     const layoutSel = document.getElementById('layoutSel');
+    const syncSeg = () => document.querySelectorAll('#layoutSeg button').forEach(b => b.classList.toggle('active', b.dataset.layout === layout));
+    document.querySelectorAll('#layoutSeg button').forEach(b => b.addEventListener('click', () => {
+      layoutSel.value = b.dataset.layout; layoutSel.dispatchEvent(new Event('change'));
+    }));
     layoutSel.addEventListener('change', () => {
       const data = collect();       // نوشته‌ها حفظ می‌شوند
       data.layout = layoutSel.value;
@@ -517,7 +564,7 @@
       if (!data) return;
       // سازگاری با فایل‌های نسخه‌ی قبل
       if (!data.type && data.fontMain) data.type = { main: { font: data.fontMain }, title: { font: data.fontTitle }, decor: { font: data.fontDecor } };
-      renderDays(data.layout || 'between'); layoutSel.value = layout;
+      renderDays(data.layout || 'between'); layoutSel.value = layout; syncSeg();
       setType(data.type);
       applyPalette(data.palette || 'moor');
       bmiManual = !!data.bmiManual;
@@ -587,8 +634,18 @@
 
     // ---------------- دانلود رنگی (بدون پنجره‌ی چاپ) ----------------
     const dlMenu = document.getElementById('dlMenu');
-    document.getElementById('btnDownload').addEventListener('click', e => { e.stopPropagation(); dlMenu.hidden = !dlMenu.hidden; });
-    document.addEventListener('click', () => { dlMenu.hidden = true; });
+    // پنجره‌های کوچک نوار بالا
+    const closePops = except => document.querySelectorAll('.pop').forEach(p => {
+      if (p !== except) { p.hidden = true; const b = document.querySelector(`[data-pop="${p.id}"]`); b && b.classList.remove('open'); }
+    });
+    document.querySelectorAll('[data-pop]').forEach(btn => btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const pop = document.getElementById(btn.dataset.pop);
+      closePops(pop); pop.hidden = !pop.hidden; btn.classList.toggle('open', !pop.hidden);
+    }));
+    document.querySelectorAll('.pop').forEach(p => p.addEventListener('click', e => e.stopPropagation()));
+    document.addEventListener('click', () => closePops());
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closePops(); });
     let jspdfLoading = null;
     const loadJsPDF = () => jspdfLoading || (jspdfLoading = new Promise((res, rej) => {
       const sc = document.createElement('script'); sc.src = 'lib/jspdf.umd.min.js'; sc.onload = res; sc.onerror = rej; document.head.append(sc);
@@ -600,7 +657,7 @@
       return `برنامه-غذایی_${clean(f.name) || 'برنامه'}${no ? '_' + no : ''}`;
     }
     dlMenu.querySelectorAll('button').forEach(btn => btn.addEventListener('click', async () => {
-      dlMenu.hidden = true;
+      closePops();
       const kind = btn.dataset.kind;
       const page = document.getElementById('chartPage');
       status.textContent = 'در حال ساختن فایل…';
@@ -630,6 +687,7 @@
     let saved = null;
     try { saved = JSON.parse(localStorage.getItem(STORE)); } catch (e) {}
     if (saved) fill(saved); else { setType(); applyPalette('moor'); }
+    syncSeg();
   </script>
   <!-- پنجره‌ی فهرست برنامه‌ها -->
   <div id="driveModal" class="dm" hidden>

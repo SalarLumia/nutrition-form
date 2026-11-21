@@ -118,7 +118,11 @@ const DRIVE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx9aC64qGHWMIM
   }
 
   // ---------------- دکمه‌ها ----------------
-  function updateLoginBtn() { $('btnDriveLogin').textContent = getPass() ? 'رمز درایو ✓' : 'وارد کردن رمز درایو'; }
+  function updateLoginBtn() {
+    const ok = !!getPass();
+    $('btnDriveLogin').title = ok ? 'رمز درایو وارد شده؛ برای تغییر کلیک کن' : 'وارد کردن رمز درایو';
+    $('btnDriveLogin').classList.toggle('ok', ok);
+  }
   $('btnDriveLogin').onclick = async () => {
     if (!askPass()) return;
     try { await call('ping'); status('اتصال برقرار است ✓'); } catch (e) { status(e.message); }
