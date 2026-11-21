@@ -109,6 +109,25 @@
     .swatch i b { flex: 1; }
     .swatch.active { outline: 2px solid #3A372B; outline-offset: 1px; }
 
+    /* ---------------- پنجره‌ی فهرست درایو ---------------- */
+    .dm { position: fixed; inset: 0; z-index: 50; background: rgba(30,28,24,0.35); display: flex; align-items: center; justify-content: center; font-family: 'F-Shabnam', Tahoma, sans-serif; }
+    .dm[hidden] { display: none; }
+    .dm-box { width: min(760px, 94vw); height: min(560px, 86vh); background: #FFF; border-radius: 14px; box-shadow: 0 20px 60px rgba(0,0,0,0.25); display: flex; flex-direction: column; overflow: hidden; }
+    .dm-head { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid #EEE8E0; font-size: 14px; }
+    .dm-head input { flex: 1; font-family: inherit; font-size: 13px; padding: 6px 10px; border: 1px solid #DCD4CA; border-radius: 8px; }
+    .dm-head button { font-family: inherit; border: none; background: none; font-size: 16px; cursor: pointer; color: #6A6055; }
+    .dm-body { flex: 1; display: grid; grid-template-columns: 220px 1fr; min-height: 0; }
+    .dm-clients { border-left: 1px solid #EEE8E0; overflow: auto; padding: 8px; display: flex; flex-direction: column; gap: 4px; }
+    .dm-client { font-family: inherit; text-align: right; font-size: 13px; padding: 8px 10px; border: none; border-radius: 8px; background: none; cursor: pointer; color: #2E2A22; }
+    .dm-client:hover { background: #F6F2EB; }
+    .dm-client.active { background: #3E4938; color: #FFF; }
+    .dm-plans { overflow: auto; padding: 12px 16px; }
+    .dm-plans h3 { font-size: 15px; margin-bottom: 10px; color: #3E4938; }
+    .dm-plan { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border: 1px solid #EEE8E0; border-radius: 10px; margin-bottom: 8px; font-size: 13px; }
+    .dm-plan div { display: flex; flex-direction: column; gap: 3px; }
+    .dm-plan button { font-family: inherit; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 8px; border: 1px solid #3E4938; background: #3E4938; color: #FFF; cursor: pointer; }
+    .dm-muted { color: #8A7F72; font-size: 12px; }
+
     /* ---------------- صفحه A4 عمودی ---------------- */
     .page {
       position: relative;
@@ -245,7 +264,7 @@
         margin: 0 !important; padding: 0 !important;
         -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
       }
-      .toolbar { display: none !important; }
+      .toolbar, .dm { display: none !important; }
       .page { margin: 0 !important; box-shadow: none !important; page-break-after: avoid; page-break-inside: avoid; }
       .cell.overflow, .notes-content.overflow { box-shadow: none; }
       .cell:focus { background: none; }
@@ -266,6 +285,13 @@
       </select></label>
     </div>
     <div class="tb-row"><span class="tb-name">رنگ</span><div class="swatches" id="swatches"></div></div>
+    <div class="tb-sep"></div>
+    <div class="tb-row"><span class="tb-name">درایو</span>
+      <button type="button" id="btnDriveLogin">ورود به گوگل درایو</button>
+      <button type="button" id="btnDriveSave" class="btn-primary">ذخیره در درایو</button>
+      <button type="button" id="btnDriveList">فهرست برنامه‌ها</button>
+      <span id="driveStatus" class="save-status"></span>
+    </div>
     <div class="tb-sep"></div>
     <div class="tb-row">
       <button type="button" id="btnExport" title="برنامه را به‌صورت فایل روی دستگاه ذخیره می‌کند">ذخیره در فایل</button>
@@ -552,6 +578,7 @@
       if (!confirm('همه‌ی نوشته‌ها پاک شود؟ اگر لازم داری، اول «ذخیره در فایل» را بزن.')) return;
       fields().forEach(el => { if (!KEEP.includes(el.dataset.key)) el.innerText = ''; });
       bmiManual = false; save(); checkOverflow();
+      if (window.onPlanCleared) window.onPlanCleared();
     });
 
     // ---------------- شروع ----------------
@@ -559,5 +586,22 @@
     try { saved = JSON.parse(localStorage.getItem(STORE)); } catch (e) {}
     if (saved) fill(saved); else { setType(); applyPalette('moor'); }
   </script>
+  <!-- پنجره‌ی فهرست برنامه‌ها -->
+  <div id="driveModal" class="dm" hidden>
+    <div class="dm-box">
+      <div class="dm-head">
+        <b>برنامه‌های ذخیره‌شده در درایو</b>
+        <input id="dmSearch" type="search" placeholder="جست‌وجوی نام مراجع" />
+        <button type="button" id="dmClose" aria-label="بستن">✕</button>
+      </div>
+      <div class="dm-body">
+        <div id="dmClients" class="dm-clients"></div>
+        <div id="dmPlans" class="dm-plans"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="drive.js"></script>
 </body>
 </html>
