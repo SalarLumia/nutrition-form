@@ -6,7 +6,7 @@
    ===================================================================== */
 
 // آدرس Web App اسکریپت (Deploy ← Web app) را این‌جا بگذار
-const DRIVE_SCRIPT_URL = '';
+const DRIVE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx9aC64qGHWMIMUA7C1Eu-3kVurSOb06nyRhY2UeWyBySXsmrcxuUHGydBGNK3ucwam/exec';
 
 (() => {
   const PASS_KEY = 'drive-pass';
