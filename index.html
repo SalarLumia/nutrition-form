@@ -298,9 +298,6 @@
     </div>
     <div class="tb-sep"></div>
     <div class="tb-row">
-      <button type="button" id="btnExport" title="برنامه را به‌صورت فایل روی دستگاه ذخیره می‌کند">ذخیره در فایل</button>
-      <label class="btn-file" for="importFile" title="یک فایل برنامه‌ی ذخیره‌شده را باز می‌کند">باز کردن فایل</label>
-      <input type="file" id="importFile" accept=".json,application/json" />
       <button type="button" id="btnClear">برنامه‌ی جدید</button>
       <span class="dl-wrap">
         <button type="button" class="btn-primary" id="btnDownload">دانلود ▾</button>
@@ -581,24 +578,6 @@
     }
     window.addEventListener('resize', checkOverflow);
 
-    document.getElementById('btnExport').addEventListener('click', () => {
-      const data = collect();
-      const name = (data.fields.name || 'برنامه').trim().replace(/[\\/:*?"<>|]/g, '') || 'برنامه';
-      const no = (data.fields.planNo || '').trim().replace(/[\\/:*?"<>|]/g, '');
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `برنامه-غذایی_${name}${no ? '_' + no : ''}.json`;
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-    });
-    document.getElementById('importFile').addEventListener('change', async e => {
-      const file = e.target.files[0];
-      if (!file) return;
-      try { fill(JSON.parse(await file.text())); save(); status.textContent = 'فایل باز شد ✓'; }
-      catch (err) { status.textContent = 'این فایل برنامه‌ی معتبری نیست'; }
-      e.target.value = '';
-    });
     document.getElementById('btnClear').addEventListener('click', () => {
       if (!confirm('همه‌ی نوشته‌ها پاک شود؟ اگر لازم داری، اول «ذخیره در فایل» را بزن.')) return;
       fields().forEach(el => { if (!KEEP.includes(el.dataset.key)) el.innerText = ''; });

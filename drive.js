@@ -129,7 +129,6 @@ const DRIVE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx9aC64qGHWMIM
   $('driveModal').addEventListener('mousedown', e => { if (e.target.id === 'driveModal') $('driveModal').hidden = true; });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') $('driveModal').hidden = true; });
   window.onPlanCleared = () => { current = null; };
-  $('importFile').addEventListener('change', () => { current = null; });
 
   updateLoginBtn();
   if (!DRIVE_SCRIPT_URL) status('ذخیره در درایو هنوز راه‌اندازی نشده');
