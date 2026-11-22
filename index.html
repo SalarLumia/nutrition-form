@@ -2,7 +2,8 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+  <meta name="format-detection" content="telephone=no" />
   <title>برنامه غذایی هفتگی</title>
 
   <style>
@@ -81,7 +82,7 @@
       position: fixed; top: 0; inset-inline: 0; z-index: 40;
       height: 58px; padding: 0 18px;
       display: flex; align-items: center; gap: 14px;
-      background: rgba(255,255,255,0.92); backdrop-filter: blur(10px);
+      background: rgba(255,255,255,0.94); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
       border-bottom: 1px solid #ECE6DE; box-shadow: 0 1px 10px rgba(40,35,25,0.05);
       font-family: 'F-Shabnam', Tahoma, sans-serif; font-size: 13px; color: #2E2A22;
     }
@@ -161,6 +162,51 @@
     .dm-plan div { display: flex; flex-direction: column; gap: 3px; }
     .dm-plan button { font-family: inherit; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 8px; border: 1px solid #3E4938; background: #3E4938; color: #FFF; cursor: pointer; }
     .dm-muted { color: #8A7F72; font-size: 12px; }
+
+    /* ---------------- موبایل ---------------- */
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    body { padding-top: calc(76px + env(safe-area-inset-top)); }
+    .toolbar { padding-top: env(safe-area-inset-top); height: calc(58px + env(safe-area-inset-top)); }
+    /* عرض صفحه نباید از عرض گوشی بیرون بزند؛ بزرگ‌نمایی با fitPage تنظیم می‌شود */
+    #pageWrap { margin: 0 auto; max-width: 100vw; overflow: hidden; }
+    @media (max-width: 700px) {
+      body { padding-top: calc(var(--tbh, 106px) + 10px); }
+      .toolbar {
+        height: auto; flex-wrap: wrap; row-gap: 4px; padding: calc(6px + env(safe-area-inset-top)) 8px 6px;
+        -webkit-backdrop-filter: none; backdrop-filter: none; background: #FFF;
+      }
+      .tb-brand { display: none; }
+      .tb-mid, .tb-end { flex: 1 1 100%; justify-content: space-between; gap: 2px; }
+      .tb-end > .tb-brand { display: none; }
+      .tbtn { height: 42px; padding: 0 10px; }
+      .tbtn .lbl { display: none; }
+      .tbtn.primary .lbl, .tbtn.dark .lbl, .tbtn.ghost .lbl { display: inline; font-size: 12.5px; }
+      .tb-div { display: none; }
+      .pop-wrap { position: static; }
+      .pop, .pop.left {
+        position: fixed; top: calc(var(--tbh, 106px) + 6px); left: 8px; right: 8px;
+        max-height: 70vh; overflow: auto; -webkit-overflow-scrolling: touch;
+      }
+      .tb-row { flex-wrap: wrap; row-gap: 6px; }
+      .tb-row .tb-name { width: 100%; }
+      .pop select { font-size: 16px; }            /* جلوگیری از بزرگ‌نمایی خودکار iOS */
+      .swatches { grid-template-columns: repeat(3, 1fr); }
+      .dm-box { width: 100vw; height: 100%; border-radius: 0; padding-top: env(safe-area-inset-top); }
+      .dm-body { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+      .dm-clients { border-left: none; border-bottom: 1px solid #EEE8E0; flex-direction: row; overflow-x: auto; max-height: none; }
+      .dm-client { white-space: nowrap; flex: none; }
+      .dm-head input { font-size: 16px; }
+      #mobileHint { display: block !important; }
+    }
+    #mobileHint { display: none; text-align: center; font-family: 'F-Shabnam', Tahoma, sans-serif; font-size: 12px; color: #8A8175; margin: -2px 0 8px; }
+
+    /* برگه‌ی آماده برای ذخیره در گوشی */
+    .ready { position: fixed; inset: auto 12px calc(14px + env(safe-area-inset-bottom)) 12px; z-index: 60; background: #FFF; border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,0.22); padding: 14px; display: flex; align-items: center; gap: 10px; font-family: 'F-Shabnam', Tahoma, sans-serif; font-size: 13px; }
+    .ready[hidden] { display: none; }
+    .ready span { flex: 1; }
+    .ready button { font-family: inherit; font-size: 14px; font-weight: 700; border: none; border-radius: 10px; padding: 10px 14px; cursor: pointer; }
+    .ready .go { background: #3E4938; color: #FFF; }
+    .ready .x { background: #F3EFE9; color: #2E2A22; }
 
     /* ---------------- صفحه A4 عمودی ---------------- */
     .page {
@@ -297,7 +343,8 @@
         margin: 0 !important; padding: 0 !important;
         -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
       }
-      .toolbar, .dm { display: none !important; }
+      .toolbar, .dm, .ready, #mobileHint { display: none !important; }
+      #pageWrap { zoom: 1 !important; }
       body { padding-top: 0 !important; }
       .page { margin: 0 !important; box-shadow: none !important; page-break-after: avoid; page-break-inside: avoid; }
       .cell.overflow, .notes-content.overflow { box-shadow: none; }
@@ -353,6 +400,8 @@
     </div>
   </div>
 
+  <p id="mobileHint">برای خواندن راحت‌تر، صفحه را با دو انگشت بزرگ کن</p>
+  <div id="pageWrap">
   <main class="page" id="chartPage">
     <div class="frame"></div>
     <!-- خطوط گوشه‌ها: هم‌رنگ و هم‌ضخامت قاب دور صفحه، با مسیرهای نامنظم -->
@@ -393,6 +442,14 @@
 
     <footer class="foot"><img class="logo" id="logoImg" alt="Trim – NACM Yoga" /></footer>
   </main>
+  </div>
+
+  <div class="ready" id="readySheet" hidden>
+    <span id="readyText">فایل آماده است</span>
+    <button type="button" class="go" id="readyGo">ذخیره</button>
+    <button type="button" class="x" id="readyX">بستن</button>
+  </div>
+
 
   <script>
     const toFa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
@@ -656,36 +713,113 @@
       const no = clean(f.planNo);
       return `برنامه-غذایی_${clean(f.name) || 'برنامه'}${no ? '_' + no : ''}`;
     }
+    // --- محیط مرورگر
+    const ua = navigator.userAgent;
+    const isIOS = /iP(hone|ad|od)/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isSafari = /^((?!chrome|android|crios|fxios|edg).)*safari/i.test(ua);
+    const shareMode = (() => {
+      try { return (isIOS || matchMedia('(pointer: coarse)').matches) && !!navigator.canShare &&
+                   navigator.canShare({ files: [new File(['x'], 'x.png', { type: 'image/png' })] }); }
+      catch (e) { return false; }
+    })();
+
+    // --- فقط فونت‌هایی که در صفحه استفاده شده‌اند داخل فایل می‌روند (سبک‌تر و سریع‌تر، مخصوصاً در آیفون)
+    const fontCache = {};
+    const toDataURL = blob => new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(blob); });
+    async function usedFontCSS() {
+      const used = new Set(['F-IRANSans']);
+      for (const g of Object.keys(GROUPS)) {
+        const f = FONTS.find(x => x.id === ctl[g].font.value);
+        if (f) used.add(f.css.replace(/'/g, ''));
+      }
+      let css = '';
+      for (const sheet of document.styleSheets) {
+        let rules; try { rules = sheet.cssRules; } catch (e) { continue; }
+        for (const r of rules) {
+          if (!(r instanceof CSSFontFaceRule)) continue;
+          const fam = r.style.getPropertyValue('font-family').replace(/['"]/g, '').trim();
+          if (!used.has(fam)) continue;
+          const m = r.style.getPropertyValue('src').match(/url\(["']?([^"')]+\.woff2)["']?\)/);
+          if (!m) continue;
+          const url = new URL(m[1], location.href).href;
+          if (!fontCache[url]) fontCache[url] = fetch(url).then(x => x.blob()).then(toDataURL);
+          css += `@font-face{font-family:'${fam}';font-weight:${r.style.getPropertyValue('font-weight') || 400};font-style:normal;src:url(${await fontCache[url]}) format('woff2');}\n`;
+        }
+      }
+      return css;
+    }
+
+    // --- تحویل فایل: در گوشی با برگه‌ی اشتراک (ذخیره در Photos / Files)، در کامپیوتر دانلود مستقیم
+    const ready = document.getElementById('readySheet');
+    let pendingFile = null;
+    function plainDownload(blob, name) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = name; a.rel = 'noopener';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
+    }
+    function deliver(blob, name, type) {
+      if (!shareMode) { plainDownload(blob, name); status.textContent = 'فایل دانلود شد ✓'; return; }
+      pendingFile = new File([blob], name, { type });
+      document.getElementById('readyText').textContent = type === 'application/pdf' ? 'PDF آماده است' : 'تصویر آماده است';
+      ready.hidden = false;
+      status.textContent = 'فایل آماده است ✓';
+    }
+    // اشتراک‌گذاری باید با یک لمس تازه شروع شود (قانون سافاری)
+    document.getElementById('readyGo').addEventListener('click', async () => {
+      if (!pendingFile) return;
+      try { await navigator.share({ files: [pendingFile] }); ready.hidden = true; }
+      catch (e) { if (e.name !== 'AbortError') { plainDownload(pendingFile, pendingFile.name); ready.hidden = true; } }
+    });
+    document.getElementById('readyX').addEventListener('click', () => { ready.hidden = true; pendingFile = null; });
+
     dlMenu.querySelectorAll('button').forEach(btn => btn.addEventListener('click', async () => {
       closePops();
       const kind = btn.dataset.kind;
       const page = document.getElementById('chartPage');
+      const wrap = document.getElementById('pageWrap');
       status.textContent = 'در حال ساختن فایل…';
       if (document.activeElement) document.activeElement.blur();
       getSelection().removeAllRanges();
       page.classList.add('exporting');
+      const prevZoom = wrap.style.zoom; wrap.style.zoom = 1;          // اندازه‌ی واقعی برای ساختن فایل
       try {
         await document.fonts.ready; await logoReady;
-        const opts = { pixelRatio: 2.5, style: { margin: '0', boxShadow: 'none' } };
+        const opts = {
+          pixelRatio: isIOS ? 2 : 2.5,                                // حافظه‌ی آیفون محدودتر است
+          style: { margin: '0', boxShadow: 'none' },
+          fontEmbedCSS: await usedFontCSS()
+        };
+        // سافاری بار اول گاهی فونت و تصویر را جا می‌اندازد؛ یک دور گرم‌کردن
+        if (isSafari) { try { await htmlToImage.toCanvas(page, opts); } catch (e) {} }
         if (kind === 'png') {
-          // به‌صورت Blob، نه data URL: مرورگرهای کرومی دانلود data URL بزرگ‌تر از ۲ مگابایت را رد می‌کنند
           const blob = await htmlToImage.toBlob(page, opts);
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url; a.download = fileBase() + '.png';
-          document.body.appendChild(a); a.click(); a.remove();
-          setTimeout(() => URL.revokeObjectURL(url), 10000);
+          deliver(blob, fileBase() + '.png', 'image/png');
         } else {
           const [img] = await Promise.all([htmlToImage.toJpeg(page, { ...opts, quality: 0.93 }), loadJsPDF()]);
           const pdf = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
           pdf.addImage(img, 'JPEG', 0, 0, 210, 297);
-          pdf.save(fileBase() + '.pdf');
+          deliver(pdf.output('blob'), fileBase() + '.pdf', 'application/pdf');
         }
-        status.textContent = 'فایل دانلود شد ✓';
       } catch (err) {
         console.error(err); status.textContent = 'ساختن فایل انجام نشد';
-      } finally { page.classList.remove('exporting'); }
+      } finally { page.classList.remove('exporting'); wrap.style.zoom = prevZoom; }
     }));
+
+    // --- جا دادن صفحه‌ی A4 در عرض گوشی
+    function fitPage() {
+      const tb = document.querySelector('.toolbar');
+      document.documentElement.style.setProperty('--tbh', tb.offsetHeight + 'px');
+      const z = Math.min(1, (document.documentElement.clientWidth - 12) / 794);
+      const wrap = document.getElementById('pageWrap');
+      wrap.style.zoom = z < 1 ? z.toFixed(4) : '';
+      wrap.style.width = z < 1 ? '794px' : '';
+      wrap.style.maxWidth = z < 1 ? 'none' : '';
+    }
+    window.addEventListener('resize', fitPage);
+    window.addEventListener('orientationchange', () => setTimeout(fitPage, 300));
+    fitPage();
 
     // ---------------- شروع ----------------
     let saved = null;
