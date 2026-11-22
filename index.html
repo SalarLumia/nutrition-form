@@ -667,10 +667,14 @@
       try {
         await document.fonts.ready; await logoReady;
         const opts = { pixelRatio: 2.5, style: { margin: '0', boxShadow: 'none' } };
-        const a = document.createElement('a');
         if (kind === 'png') {
-          a.href = await htmlToImage.toPng(page, opts);
-          a.download = fileBase() + '.png'; a.click();
+          // به‌صورت Blob، نه data URL: مرورگرهای کرومی دانلود data URL بزرگ‌تر از ۲ مگابایت را رد می‌کنند
+          const blob = await htmlToImage.toBlob(page, opts);
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url; a.download = fileBase() + '.png';
+          document.body.appendChild(a); a.click(); a.remove();
+          setTimeout(() => URL.revokeObjectURL(url), 10000);
         } else {
           const [img] = await Promise.all([htmlToImage.toJpeg(page, { ...opts, quality: 0.93 }), loadJsPDF()]);
           const pdf = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
