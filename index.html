@@ -296,6 +296,9 @@
       padding: 2mm 4mm 2.5mm;
       display: flex; flex-direction: column; min-height: 0;
     }
+    .card-title { outline: none; }
+    .card-title:focus { background: color-mix(in srgb, var(--line) 14%, transparent); border-radius: 2mm; }
+    .exporting .card-title:focus { background: none; }
     .card-title {
       font-family: var(--font-decor) !important;
       text-align: center;
@@ -331,7 +334,7 @@
 
     /* لوگو با رنگ پالت */
     .foot { display: flex; justify-content: center; align-items: center; height: 8mm; }
-    .logo { width: 28mm; height: auto; display: block; }
+    .logo { width: 26mm; height: auto; display: block; }
     /* هنگام ساختن فایل دانلود، نشانه‌های ویرایش دیده نشوند */
     .exporting .cell.overflow, .exporting .notes-content.overflow { box-shadow: none; }
     .exporting .cell:focus { background: none; }
@@ -567,7 +570,7 @@
       layout = LAYOUTS[id] ? id : 'between';
       let html = '';
       DAYS.forEach((day, d) => {
-        html += `<article class="card"><h2 class="card-title">${day}</h2>`;
+        html += `<article class="card"><h2 class="card-title" contenteditable="true" data-key="day${d}">${day}</h2>`;
         LAYOUTS[layout].forEach(([k, m]) => {
           if (Array.isArray(k)) {
             html += `<div class="meal split"><span class="meal-label">${m}</span>`
@@ -580,7 +583,7 @@
         });
         html += `</article>`;
       });
-      html += `<article class="card notes"><h2 class="card-title">توصیه‌ها</h2><div class="notes-content" contenteditable="true" data-key="notes"></div></article>`;
+      html += `<article class="card notes"><h2 class="card-title" contenteditable="true" data-key="notesTitle">توصیه‌ها</h2><div class="notes-content" contenteditable="true" data-key="notes"></div></article>`;
       document.getElementById('days').innerHTML = html;
     }
     renderDays('between');
@@ -611,7 +614,7 @@
 
     // ---------------- ذخیره و بازیابی ----------------
     const fields = () => document.querySelectorAll('[data-key]');
-    const KEEP = ['title', 'subtitle'];
+    const KEEP = ['title', 'subtitle', 'notesTitle', ...DAYS.map((_, d) => 'day' + d)];
     function collect() {
       const data = { v: 4, type: getType(), palette, layout, bmiManual, fields: {} };
       fields().forEach(el => { data.fields[el.dataset.key] = el.innerText.replace(/\n$/, ''); });
@@ -656,7 +659,7 @@
       document.execCommand('insertText', false, (e.clipboardData || window.clipboardData).getData('text/plain'));
     });
     document.addEventListener('keydown', e => {
-      if (e.key === 'Enter' && e.target.matches && e.target.matches('.info-value, .main-title, .sub-title, .plan-no .val')) e.preventDefault();
+      if (e.key === 'Enter' && e.target.matches && e.target.matches('.info-value, .main-title, .sub-title, .plan-no .val, .card-title')) e.preventDefault();
     });
 
     // کلیک در هر جای ردیف، خانه‌ی همان ردیف را فعال می‌کند
